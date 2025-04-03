@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.Objects;
+
 @Entity
 @NoArgsConstructor
 @Getter
@@ -55,25 +57,19 @@ public class OrderHeader extends BaseEntity  {
     @Embedded
     private Address billToAddress;
 
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof OrderHeader that)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-
-        if (getCustomer() != null ? !getCustomer().equals(that.getCustomer()) : that.getCustomer() != null)
-            return false;
-        if (shippingAddress != null ? !shippingAddress.equals(that.shippingAddress) : that.shippingAddress != null)
-            return false;
-        return billToAddress != null ? billToAddress.equals(that.billToAddress) : that.billToAddress == null;
+        OrderHeader that = (OrderHeader) o;
+        return Objects.equals(customer, that.customer) && Objects.equals(shippingAddress, that.shippingAddress) && Objects.equals(billToAddress, that.billToAddress) && orderStatus == that.orderStatus;
     }
 
     @Override
     public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (getCustomer() != null ? getCustomer().hashCode() : 0);
-        result = 31 * result + (shippingAddress != null ? shippingAddress.hashCode() : 0);
-        result = 31 * result + (billToAddress != null ? billToAddress.hashCode() : 0);
-        return result;
+        return Objects.hash(super.hashCode(), customer, shippingAddress, billToAddress, orderStatus);
     }
 }
