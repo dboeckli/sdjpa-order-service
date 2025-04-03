@@ -8,8 +8,8 @@
         <option name="value" value="true" />
       </param>
     </additionalParameters>
-    <module name="sdjpa-spring-data-jpa" />
-    <option name="SPRING_BOOT_MAIN_CLASS" value="ch.dboeckli.guru.jpa.hibernate.dao.Spring6Application" />
+    <module name="sdjpa-order-service" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="ch.dboeckli.guru.jpa.orderservice.Spring6Application" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

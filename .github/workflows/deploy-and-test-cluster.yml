@@ -38,15 +38,15 @@ jobs:
       - name: Deploy application
         run: |
           # Replace the version placeholder in the deployment manifest
-          sed -i 's|image: domboeckli/sdjpa-spring-data-jpa:[^[:space:]]*|image: domboeckli/sdjpa-spring-data-jpa:${{ inputs.version }}|g' k8s/app.yml
+          sed -i 's|image: domboeckli/sdjpa-order-service:[^[:space:]]*|image: domboeckli/sdjpa-order-service:${{ inputs.version }}|g' k8s/app.yml
           kubectl apply -f k8s/
 
       - name: Wait for Pods to be ready
         run: |
-          if ! kubectl wait --for=condition=ready pod -l app=sdjpa-spring-data-jpa --timeout=180s; then
+          if ! kubectl wait --for=condition=ready pod -l app=sdjpa-order-service --timeout=180s; then
             echo "Pod did not become ready within 180 seconds. Displaying logs:"
-            kubectl get pods -l app=sdjpa-spring-data-jpa
-            POD_NAME=$(kubectl get pods -l app=sdjpa-spring-data-jpa -o jsonpath="{.items[0].metadata.name}")
+            kubectl get pods -l app=sdjpa-order-service
+            POD_NAME=$(kubectl get pods -l app=sdjpa-order-service -o jsonpath="{.items[0].metadata.name}")
             kubectl logs $POD_NAME
             echo "Describing the pod:"
             kubectl describe pod $POD_NAME
@@ -59,7 +59,7 @@ jobs:
       - name: Display Deployment Information
         run: |
           echo "Deployment Information:"
-          kubectl get deployment sdjpa-spring-data-jpa -o yaml
+          kubectl get deployment sdjpa-order-service -o yaml
           
           
 

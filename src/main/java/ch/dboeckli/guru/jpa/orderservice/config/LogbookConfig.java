@@ -1,4 +1,4 @@
-package ch.dboeckli.guru.jpa.hibernate.dao.config;
+package ch.dboeckli.guru.jpa.orderservice.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

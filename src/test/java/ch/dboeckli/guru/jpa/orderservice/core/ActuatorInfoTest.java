@@ -1,4 +1,4 @@
-package ch.dboeckli.guru.jpa.hibernate.dao.core;
+package ch.dboeckli.guru.jpa.orderservice.core;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;

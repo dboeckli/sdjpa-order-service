@@ -9,7 +9,7 @@
     </parent>
 
     <groupId>ch.dboeckli.guru.springframework.jpa</groupId>
-    <artifactId>sdjpa-spring-data-jpa</artifactId>
+    <artifactId>sdjpa-order-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
     <name>${project.artifactId}</name>
