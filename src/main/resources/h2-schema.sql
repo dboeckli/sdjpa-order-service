@@ -1,5 +1,6 @@
 drop table if exists order_header cascade;
 drop table if exists product cascade;
+drop table if exists order_line cascade;
 
 create table order_header
 (
@@ -25,4 +26,14 @@ create table product
     last_modified_date timestamp,
     description varchar(100),
     product_status varchar(20)
+);
+
+create table order_line
+(
+    id bigint not null auto_increment primary key,
+    quantity_ordered int,
+    order_header_id bigint,
+    created_date timestamp,
+    last_modified_date timestamp,
+    constraint order_header_pk FOREIGN KEY (order_header_id) references order_header(id)
 );
