@@ -47,7 +47,7 @@ import java.util.Objects;
         column = @Column(name = "bill_to_zip_code")
     )
 })
-public class OrderHeader extends BaseEntity  {
+public class OrderHeader extends BaseEntity {
 
     private String customer;
 
