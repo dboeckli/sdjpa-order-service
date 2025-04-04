@@ -21,16 +21,19 @@ public class OrderLine extends BaseEntity {
     @ManyToOne
     private OrderHeader orderHeader;
 
+    @ManyToOne
+    private Product product;
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         OrderLine orderLine = (OrderLine) o;
-        return Objects.equals(quantityOrdered, orderLine.quantityOrdered) && Objects.equals(orderHeader, orderLine.orderHeader);
+        return Objects.equals(quantityOrdered, orderLine.quantityOrdered) && Objects.equals(orderHeader, orderLine.orderHeader) && Objects.equals(product, orderLine.product);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), quantityOrdered);
+        return Objects.hash(super.hashCode(), quantityOrdered, product);
     }
 }
