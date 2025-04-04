@@ -4,38 +4,52 @@ drop table if exists order_line cascade;
 
 create table order_header
 (
-    id                  bigint not null auto_increment primary key,
-    created_date        timestamp,
-    last_modified_date  timestamp,
-    customer            varchar(255),
-    shipping_address    varchar(30),
-    shipping_city       varchar(30),
-    shipping_state      varchar(30),
-    shipping_zip_code   varchar(30),
-    bill_to_address     varchar(30),
-    bill_to_city        varchar(30),
-    bill_to_state       varchar(30),
-    bill_to_zip_code    varchar(30),
-    order_status        varchar(30)
+    id                 bigint not null auto_increment primary key,
+    created_date       timestamp,
+    last_modified_date timestamp,
+    customer           varchar(255),
+    shipping_address   varchar(30),
+    shipping_city      varchar(30),
+    shipping_state     varchar(30),
+    shipping_zip_code  varchar(30),
+    bill_to_address    varchar(30),
+    bill_to_city       varchar(30),
+    bill_to_state      varchar(30),
+    bill_to_zip_code   varchar(30),
+    order_status       varchar(30)
 );
 
 create table product
 (
-    id bigint not null auto_increment primary key,
-    created_date timestamp,
+    id                 bigint not null auto_increment primary key,
+    created_date       timestamp,
     last_modified_date timestamp,
-    description varchar(100),
-    product_status varchar(20)
+    description        varchar(100),
+    product_status     varchar(20)
 );
 
 create table order_line
 (
-    id bigint not null auto_increment primary key,
-    quantity_ordered int,
-    order_header_id bigint,
-    product_id bigint,
-    created_date timestamp,
+    id                 bigint not null auto_increment primary key,
+    quantity_ordered   int,
+    order_header_id    bigint,
+    product_id         bigint,
+    created_date       timestamp,
     last_modified_date timestamp,
-    constraint order_header_pk FOREIGN KEY (order_header_id) references order_header(id),
-    constraint order_line_product_fk FOREIGN KEY (product_id) references product(id)
+    constraint order_header_pk FOREIGN KEY (order_header_id) references order_header (id),
+    constraint order_line_product_fk FOREIGN KEY (product_id) references product (id)
+);
+
+create table customer
+(
+    id                 bigint not null auto_increment primary key,
+    customer_name      varchar(50),
+    address            varchar(30),
+    city               varchar(30),
+    state              varchar(30),
+    zip_code           varchar(30),
+    phone              varchar(20),
+    email              varchar(255),
+    created_date       timestamp,
+    last_modified_date timestamp
 );
