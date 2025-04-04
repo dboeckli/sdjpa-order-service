@@ -1,3 +1,18 @@
+create table category (
+                          id bigint not null auto_increment primary key,
+                          description varchar(50),
+                          created_date timestamp,
+                          last_modified_date timestamp
+);
+
+create table product_category (
+                                  product_id bigint not null,
+                                  category_id bigint not null,
+                                  primary key (product_id, category_id),
+                                  constraint pc_product_id_fk FOREIGN KEY (product_id) references product(id),
+                                  constraint pc_category_id_fk FOREIGN KEY (category_id) references category(id)
+);
+
 insert into product (description, product_status, created_date, last_modified_date)
 values ('PRODUCT1', 'NEW', now(), now());
 

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -18,6 +19,15 @@ public class ProductRepositoryTest {
 
     @Autowired
     ProductRepository productRepository;
+
+    @Test
+    void testGetCategory() {
+        Product product = productRepository.findByDescription("PRODUCT1");
+
+        assertNotNull(product);
+        assertNotNull(product.getCategories());
+        assertEquals(2, product.getCategories().size());
+    }
 
     @Test
     void testSaveProduct() {
