@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ActiveProfiles("test_mysql")
@@ -20,6 +21,15 @@ public class ProductRepositoryIT {
 
     @Autowired
     ProductRepository productRepository;
+
+    @Test
+    void testGetCategory() {
+        Product product = productRepository.findByDescription("PRODUCT1");
+
+        assertNotNull(product);
+        assertNotNull(product.getCategories());
+        assertEquals(2, product.getCategories().size());
+    }
 
     @Test
     void testSaveProduct() {

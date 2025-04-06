@@ -1,6 +1,8 @@
 drop table if exists order_header cascade;
 drop table if exists product cascade;
 drop table if exists order_line cascade;
+drop table if exists category cascade;
+drop table if exists product_category cascade;
 
 create table order_header
 (
@@ -52,4 +54,21 @@ create table customer
     email              varchar(255),
     created_date       timestamp,
     last_modified_date timestamp
+    constraint order_header_pk FOREIGN KEY (order_header_id) references order_header(id),
+    constraint order_line_product_fk FOREIGN KEY (product_id) references product(id)
+);
+
+create table category (
+                          id bigint not null auto_increment primary key,
+                          description varchar(50),
+                          created_date timestamp,
+                          last_modified_date timestamp
+);
+
+create table product_category (
+                                  product_id bigint not null,
+                                  category_id bigint not null,
+                                  primary key (product_id, category_id),
+                                  constraint pc_product_id_fk FOREIGN KEY (product_id) references product(id),
+                                  constraint pc_category_id_fk FOREIGN KEY (category_id) references category(id)
 );
