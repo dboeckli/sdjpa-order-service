@@ -1,9 +1,7 @@
 package ch.dboeckli.guru.jpa.orderservice.repository.h2;
 
-import ch.dboeckli.guru.jpa.orderservice.domain.OrderHeader;
-import ch.dboeckli.guru.jpa.orderservice.domain.OrderLine;
-import ch.dboeckli.guru.jpa.orderservice.domain.Product;
-import ch.dboeckli.guru.jpa.orderservice.domain.ProductStatus;
+import ch.dboeckli.guru.jpa.orderservice.domain.*;
+import ch.dboeckli.guru.jpa.orderservice.repository.CustomerRepository;
 import ch.dboeckli.guru.jpa.orderservice.repository.OrderHeaderRepository;
 import ch.dboeckli.guru.jpa.orderservice.repository.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +23,9 @@ public class OrderHeaderRepositoryTest {
     OrderHeaderRepository orderHeaderRepository;
 
     @Autowired
+    CustomerRepository customerRepository;
+
+    @Autowired
     ProductRepository productRepository;
 
     Product product;
@@ -40,7 +41,12 @@ public class OrderHeaderRepositoryTest {
     @Test
     void testSaveOrderWithLine() {
         OrderHeader orderHeader = new OrderHeader();
-        orderHeader.setCustomer("New Customer");
+
+        Customer customer = new Customer();
+        customer.setCustomerName("New Customer");
+        Customer savedCustomer = customerRepository.save(customer);
+
+        orderHeader.setCustomer(savedCustomer);
 
         OrderLine orderLine = new OrderLine();
         orderLine.setQuantityOrdered(5);
@@ -66,7 +72,12 @@ public class OrderHeaderRepositoryTest {
     @Test
     void testSaveOrder() {
         OrderHeader orderHeader = new OrderHeader();
-        orderHeader.setCustomer("New Customer");
+
+        Customer customer = new Customer();
+        customer.setCustomerName("New Customer");
+        Customer savedCustomer = customerRepository.save(customer);
+
+        orderHeader.setCustomer(savedCustomer);
         OrderHeader savedOrder = orderHeaderRepository.save(orderHeader);
 
         assertNotNull(savedOrder);

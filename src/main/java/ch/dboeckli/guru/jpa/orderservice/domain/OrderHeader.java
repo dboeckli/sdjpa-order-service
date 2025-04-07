@@ -7,7 +7,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -51,7 +50,8 @@ import java.util.Set;
 })
 public class OrderHeader extends BaseEntity {
 
-    private String customer;
+    @ManyToOne
+    private Customer customer;
 
     @Embedded
     private Address shippingAddress;
@@ -76,14 +76,28 @@ public class OrderHeader extends BaseEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) return true;
+        if (!(o instanceof OrderHeader that)) return false;
         if (!super.equals(o)) return false;
-        OrderHeader that = (OrderHeader) o;
-        return Objects.equals(customer, that.customer) && Objects.equals(shippingAddress, that.shippingAddress) && Objects.equals(billToAddress, that.billToAddress) && orderStatus == that.orderStatus && Objects.equals(orderLines, that.orderLines);
+
+        if (getCustomer() != null ? !getCustomer().equals(that.getCustomer()) : that.getCustomer() != null)
+            return false;
+        if (getShippingAddress() != null ? !getShippingAddress().equals(that.getShippingAddress()) : that.getShippingAddress() != null)
+            return false;
+        if (getBillToAddress() != null ? !getBillToAddress().equals(that.getBillToAddress()) : that.getBillToAddress() != null)
+            return false;
+        if (getOrderStatus() != that.getOrderStatus()) return false;
+        return getOrderLines() != null ? getOrderLines().equals(that.getOrderLines()) : that.getOrderLines() == null;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), customer, shippingAddress, billToAddress, orderStatus, orderLines);
+        int result = super.hashCode();
+        result = 31 * result + (getCustomer() != null ? getCustomer().hashCode() : 0);
+        result = 31 * result + (getShippingAddress() != null ? getShippingAddress().hashCode() : 0);
+        result = 31 * result + (getBillToAddress() != null ? getBillToAddress().hashCode() : 0);
+        result = 31 * result + (getOrderStatus() != null ? getOrderStatus().hashCode() : 0);
+        result = 31 * result + (getOrderLines() != null ? getOrderLines().hashCode() : 0);
+        return result;
     }
 }
