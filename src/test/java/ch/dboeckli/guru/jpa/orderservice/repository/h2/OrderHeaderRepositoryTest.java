@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -117,20 +119,33 @@ public class OrderHeaderRepositoryTest {
         customer.setCustomerName("new Customer");
         orderHeader.setCustomer(customerRepository.save(customer));
 
-        OrderLine orderLine = new OrderLine();
-        orderLine.setQuantityOrdered(3);
-        orderLine.setProduct(product);
+        OrderLine orderLine1 = new OrderLine();
+        orderLine1.setQuantityOrdered(3);
+        orderLine1.setProduct(product);
 
-        orderHeader.addOrderLine(orderLine);
+        OrderLine orderLine2 = new OrderLine();
+        orderLine2.setQuantityOrdered(2);
+        orderLine2.setProduct(product);
+
+        orderHeader.addOrderLine(orderLine1);
+        orderHeader.addOrderLine(orderLine2);
         OrderHeader savedOrder = orderHeaderRepository.saveAndFlush(orderHeader);
         log.info("order saved and flushed");
+
+        List<Long> orderLineIds = savedOrder.getOrderLines().stream()
+            .map(OrderLine::getId)
+            .toList();
 
         orderHeaderRepository.deleteById(savedOrder.getId());
         orderHeaderRepository.flush();
 
         assertAll("Fetched Order",
             () -> assertFalse(orderHeaderRepository.existsById(savedOrder.getId())),
-            () -> assertFalse(orderLineRepository.existsById(savedOrder.getOrderLines().iterator().next().getId()))
+            () -> {
+                for (Long orderLineId : orderLineIds) {
+                    assertFalse(orderLineRepository.existsById(orderLineId), "OrderLine should be deleted: " + orderLineId);
+                }
+            }
         );
     }
 }
