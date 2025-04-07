@@ -3,6 +3,7 @@ package ch.dboeckli.guru.jpa.orderservice.repository.mysql;
 import ch.dboeckli.guru.jpa.orderservice.domain.*;
 import ch.dboeckli.guru.jpa.orderservice.repository.CustomerRepository;
 import ch.dboeckli.guru.jpa.orderservice.repository.OrderHeaderRepository;
+import ch.dboeckli.guru.jpa.orderservice.repository.OrderLineRepository;
 import ch.dboeckli.guru.jpa.orderservice.repository.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,6 +29,9 @@ public class OrderHeaderRepositoryIT {
 
     @Autowired
     ProductRepository productRepository;
+
+    @Autowired
+    OrderLineRepository orderLineRepository;
 
     Product product;
 
@@ -105,6 +109,31 @@ public class OrderHeaderRepositoryIT {
             () -> assertNotNull(fetchedOrder.getCreatedDate()),
             () -> assertNotNull(fetchedOrder.getLastModifiedDate()),
             () -> assertNotNull(fetchedOrder.getCustomer().getId())
+        );
+    }
+
+    @Test
+    void testDeleteCascade() {
+
+        OrderHeader orderHeader = new OrderHeader();
+        Customer customer = new Customer();
+        customer.setCustomerName("new Customer");
+        orderHeader.setCustomer(customerRepository.save(customer));
+
+        OrderLine orderLine = new OrderLine();
+        orderLine.setQuantityOrdered(3);
+        orderLine.setProduct(product);
+
+        orderHeader.addOrderLine(orderLine);
+        OrderHeader savedOrder = orderHeaderRepository.saveAndFlush(orderHeader);
+        log.info("order saved and flushed");
+
+        orderHeaderRepository.deleteById(savedOrder.getId());
+        orderHeaderRepository.flush();
+
+        assertAll("Fetched Order",
+            () -> assertFalse(orderHeaderRepository.existsById(savedOrder.getId())),
+            () -> assertFalse(orderLineRepository.existsById(savedOrder.getOrderLines().iterator().next().getId()))
         );
     }
 
