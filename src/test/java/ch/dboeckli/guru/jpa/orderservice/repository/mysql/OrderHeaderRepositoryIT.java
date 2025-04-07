@@ -2,7 +2,6 @@ package ch.dboeckli.guru.jpa.orderservice.repository.mysql;
 
 import ch.dboeckli.guru.jpa.orderservice.domain.*;
 import ch.dboeckli.guru.jpa.orderservice.repository.CustomerRepository;
-import ch.dboeckli.guru.jpa.orderservice.repository.OrderApprovalRepository;
 import ch.dboeckli.guru.jpa.orderservice.repository.OrderHeaderRepository;
 import ch.dboeckli.guru.jpa.orderservice.repository.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -29,9 +28,6 @@ public class OrderHeaderRepositoryIT {
 
     @Autowired
     ProductRepository productRepository;
-
-    @Autowired
-    OrderApprovalRepository orderApprovalRepository;
 
     Product product;
 
@@ -61,8 +57,7 @@ public class OrderHeaderRepositoryIT {
 
         OrderApproval approval = new OrderApproval();
         approval.setApprovedBy("me");
-        OrderApproval savedApproval = orderApprovalRepository.save(approval);
-        orderHeader.setOrderApproval(savedApproval);
+        orderHeader.setOrderApproval(approval);
 
         OrderHeader savedOrder = orderHeaderRepository.save(orderHeader);
         orderHeaderRepository.flush();
