@@ -11,8 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DataJpaTest
@@ -57,17 +56,21 @@ public class OrderHeaderRepositoryTest {
         OrderHeader savedOrder = orderHeaderRepository.save(orderHeader);
         orderHeaderRepository.flush();
 
-        assertNotNull(savedOrder);
-        assertNotNull(savedOrder.getId());
-        assertNotNull(savedOrder.getOrderLines());
-        assertEquals(1, savedOrder.getOrderLines().size());
-        assertNotNull(savedOrder.getOrderLines().iterator().next().getId());
+        assertAll("Saved Order",
+            () -> assertNotNull(savedOrder),
+            () -> assertNotNull(savedOrder.getId()),
+            () -> assertNotNull(savedOrder.getOrderLines()),
+            () -> assertEquals(1, savedOrder.getOrderLines().size()),
+            () -> assertNotNull(savedOrder.getOrderLines().iterator().next().getId())
+        );
 
         OrderHeader fetchedOrder = orderHeaderRepository.getReferenceById(savedOrder.getId());
-        assertNotNull(fetchedOrder);
-        assertEquals(1, fetchedOrder.getOrderLines().size());
-        assertNotNull(fetchedOrder.getOrderLines().iterator().next().getProduct().getId());
-        assertNotNull(fetchedOrder.getCustomer().getId());
+        assertAll("Fetched Order",
+            () -> assertNotNull(fetchedOrder),
+            () -> assertEquals(1, fetchedOrder.getOrderLines().size()),
+            () -> assertNotNull(fetchedOrder.getOrderLines().iterator().next().getProduct().getId()),
+            () -> assertNotNull(fetchedOrder.getCustomer().getId())
+        );
     }
 
     @Test
@@ -81,16 +84,20 @@ public class OrderHeaderRepositoryTest {
         orderHeader.setCustomer(savedCustomer);
         OrderHeader savedOrder = orderHeaderRepository.save(orderHeader);
 
-        assertNotNull(savedOrder);
-        assertNotNull(savedOrder.getId());
+        assertAll("Saved Order",
+            () -> assertNotNull(savedOrder),
+            () -> assertNotNull(savedOrder.getId())
+        );
 
         OrderHeader fetchedOrder = orderHeaderRepository.getReferenceById(savedOrder.getId());
 
-        assertNotNull(fetchedOrder);
-        assertNotNull(fetchedOrder.getId());
-        assertNotNull(fetchedOrder.getCreatedDate());
-        assertNotNull(fetchedOrder.getLastModifiedDate());
-        assertNotNull(fetchedOrder.getCustomer().getId());
+        assertAll("Fetched Order",
+            () -> assertNotNull(fetchedOrder),
+            () -> assertNotNull(fetchedOrder.getId()),
+            () -> assertNotNull(fetchedOrder.getCreatedDate()),
+            () -> assertNotNull(fetchedOrder.getLastModifiedDate()),
+            () -> assertNotNull(fetchedOrder.getCustomer().getId())
+        );
     }
 
 }
