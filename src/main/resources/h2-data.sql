@@ -34,3 +34,9 @@ where p.description = 'PRODUCT1' and c.description = 'CAT3';
 insert into product_category (product_id, category_id)
 SELECT p.id, c.id FROM product p, category c
 where p.description = 'PRODUCT4' and c.description = 'CAT3';
+
+insert into customer (customer_name, address, city, state, zip_code, phone, email)
+values ('Customer 1', '123 Duval', 'Key West', 'FL', '33040', '305.292.1435',
+        'cheeseburger@margaritville.com' );
+
+update order_header set order_header.customer_id = (select id from customer limit 1);
