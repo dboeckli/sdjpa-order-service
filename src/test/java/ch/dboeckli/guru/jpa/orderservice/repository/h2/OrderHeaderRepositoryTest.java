@@ -67,6 +67,7 @@ public class OrderHeaderRepositoryTest {
         assertNotNull(fetchedOrder);
         assertEquals(1, fetchedOrder.getOrderLines().size());
         assertNotNull(fetchedOrder.getOrderLines().iterator().next().getProduct().getId());
+        assertNotNull(fetchedOrder.getCustomer().getId());
     }
 
     @Test
@@ -89,6 +90,7 @@ public class OrderHeaderRepositoryTest {
         assertNotNull(fetchedOrder.getId());
         assertNotNull(fetchedOrder.getCreatedDate());
         assertNotNull(fetchedOrder.getLastModifiedDate());
+        assertNotNull(fetchedOrder.getCustomer().getId());
     }
 
 }
