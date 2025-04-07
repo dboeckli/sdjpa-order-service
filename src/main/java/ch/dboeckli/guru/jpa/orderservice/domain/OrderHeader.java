@@ -66,6 +66,9 @@ public class OrderHeader extends BaseEntity {
     @ToString.Exclude
     private Set<OrderLine> orderLines;
 
+    @OneToOne
+    private OrderApproval orderApproval;
+
     public void addOrderLine(OrderLine orderLine) {
         if (orderLines == null) {
             orderLines = new HashSet<>();

@@ -2,6 +2,7 @@ package ch.dboeckli.guru.jpa.orderservice.repository.h2;
 
 import ch.dboeckli.guru.jpa.orderservice.domain.*;
 import ch.dboeckli.guru.jpa.orderservice.repository.CustomerRepository;
+import ch.dboeckli.guru.jpa.orderservice.repository.OrderApprovalRepository;
 import ch.dboeckli.guru.jpa.orderservice.repository.OrderHeaderRepository;
 import ch.dboeckli.guru.jpa.orderservice.repository.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,9 @@ public class OrderHeaderRepositoryTest {
 
     @Autowired
     ProductRepository productRepository;
+
+    @Autowired
+    OrderApprovalRepository orderApprovalRepository;
 
     Product product;
 
@@ -53,6 +57,11 @@ public class OrderHeaderRepositoryTest {
 
         orderHeader.addOrderLine(orderLine);
 
+        OrderApproval approval = new OrderApproval();
+        approval.setApprovedBy("me");
+        OrderApproval savedApproval = orderApprovalRepository.save(approval);
+        orderHeader.setOrderApproval(savedApproval);
+
         OrderHeader savedOrder = orderHeaderRepository.save(orderHeader);
         orderHeaderRepository.flush();
 
@@ -69,7 +78,8 @@ public class OrderHeaderRepositoryTest {
             () -> assertNotNull(fetchedOrder),
             () -> assertEquals(1, fetchedOrder.getOrderLines().size()),
             () -> assertNotNull(fetchedOrder.getOrderLines().iterator().next().getProduct().getId()),
-            () -> assertNotNull(fetchedOrder.getCustomer().getId())
+            () -> assertNotNull(fetchedOrder.getCustomer().getId()),
+            () -> assertNotNull(fetchedOrder.getOrderApproval().getId())
         );
     }
 
