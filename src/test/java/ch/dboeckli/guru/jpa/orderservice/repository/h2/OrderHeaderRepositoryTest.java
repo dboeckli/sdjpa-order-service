@@ -129,6 +129,11 @@ public class OrderHeaderRepositoryTest {
 
         orderHeader.addOrderLine(orderLine1);
         orderHeader.addOrderLine(orderLine2);
+
+        OrderApproval orderApproval = new OrderApproval();
+        orderApproval.setApprovedBy("me");
+        orderHeader.setOrderApproval(orderApproval);
+
         OrderHeader savedOrder = orderHeaderRepository.saveAndFlush(orderHeader);
         log.info("order saved and flushed");
 
@@ -145,7 +150,8 @@ public class OrderHeaderRepositoryTest {
                 for (Long orderLineId : orderLineIds) {
                     assertFalse(orderLineRepository.existsById(orderLineId), "OrderLine should be deleted: " + orderLineId);
                 }
-            }
+            },
+            () -> assertFalse(orderLineRepository.existsById(savedOrder.getOrderApproval().getId()), "OrderApproval should be deleted: " + savedOrder.getOrderApproval().getId())
         );
     }
 }
