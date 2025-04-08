@@ -9,8 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DataJpaTest
@@ -22,11 +23,18 @@ public class ProductRepositoryTest {
 
     @Test
     void testGetCategory() {
-        Product product = productRepository.findByDescription("PRODUCT1");
-
-        assertNotNull(product);
-        assertNotNull(product.getCategories());
-        assertEquals(2, product.getCategories().size());
+        Optional<Product> productOptional = productRepository.findByDescription("PRODUCT1");
+        assertAll(
+            () -> assertTrue(productOptional.isPresent(), "Product should be present"),
+            () -> {
+                Product product = productOptional.get();
+                assertAll(
+                    () -> assertNotNull(product, "Product should not be null"),
+                    () -> assertNotNull(product.getCategories(), "Product categories should not be null"),
+                    () -> assertEquals(2, product.getCategories().size(), "Product should have 2 categories")
+                );
+            }
+        );
     }
 
     @Test
@@ -39,10 +47,14 @@ public class ProductRepositoryTest {
 
         Product fetchedProduct = productRepository.getReferenceById(savedProduct.getId());
 
-        assertNotNull(fetchedProduct);
-        assertNotNull(fetchedProduct.getDescription());
-        assertNotNull(fetchedProduct.getCreatedDate());
-        assertNotNull(fetchedProduct.getLastModifiedDate());
+        assertAll(
+            () -> assertNotNull(fetchedProduct, "Fetched product should not be null"),
+            () -> assertNotNull(fetchedProduct.getDescription(), "Product description should not be null"),
+            () -> assertEquals("My Product", fetchedProduct.getDescription(), "Product description should match"),
+            () -> assertNotNull(fetchedProduct.getCreatedDate(), "Created date should not be null"),
+            () -> assertNotNull(fetchedProduct.getLastModifiedDate(), "Last modified date should not be null"),
+            () -> assertEquals(ProductStatus.NEW, fetchedProduct.getProductStatus(), "Product status should be NEW")
+        );
     }
 
 }
