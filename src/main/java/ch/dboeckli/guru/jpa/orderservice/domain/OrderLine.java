@@ -19,6 +19,7 @@ public class OrderLine extends BaseEntity {
     private Integer quantityOrdered;
 
     @ManyToOne
+    @ToString.Exclude
     private OrderHeader orderHeader;
 
     @ManyToOne

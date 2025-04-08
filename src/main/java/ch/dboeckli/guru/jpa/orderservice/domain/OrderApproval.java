@@ -19,6 +19,7 @@ public class OrderApproval extends BaseEntity {
 
     @OneToOne
     @JoinColumn(name = "order_header_id")
+    @ToString.Exclude
     private OrderHeader orderHeader;
 
 }
