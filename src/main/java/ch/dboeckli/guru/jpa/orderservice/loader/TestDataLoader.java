@@ -59,6 +59,7 @@ public class TestDataLoader implements CommandLineRunner {
             orderLine.setQuantityOrdered(random.nextInt(20));
             orderHeader.addOrderLine(orderLine);
         });
+        orderHeaderRepository.save(orderHeader);
     }
 
     private Customer loadCustomers() {
