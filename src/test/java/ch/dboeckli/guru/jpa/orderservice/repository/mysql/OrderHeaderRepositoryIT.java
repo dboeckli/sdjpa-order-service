@@ -1,10 +1,7 @@
 package ch.dboeckli.guru.jpa.orderservice.repository.mysql;
 
 import ch.dboeckli.guru.jpa.orderservice.domain.*;
-import ch.dboeckli.guru.jpa.orderservice.repository.CustomerRepository;
-import ch.dboeckli.guru.jpa.orderservice.repository.OrderHeaderRepository;
-import ch.dboeckli.guru.jpa.orderservice.repository.OrderLineRepository;
-import ch.dboeckli.guru.jpa.orderservice.repository.ProductRepository;
+import ch.dboeckli.guru.jpa.orderservice.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,6 +31,9 @@ public class OrderHeaderRepositoryIT {
 
     @Autowired
     OrderLineRepository orderLineRepository;
+
+    @Autowired
+    OrderApprovalRepository orderApprovalRepository;
 
     Product product;
 
@@ -154,7 +154,7 @@ public class OrderHeaderRepositoryIT {
                     assertFalse(orderLineRepository.existsById(orderLineId), "OrderLine should be deleted: " + orderLineId);
                 }
             },
-            () -> assertFalse(orderLineRepository.existsById(savedOrder.getOrderApproval().getId()), "OrderApproval should be deleted: " + savedOrder.getOrderApproval().getId())
+            () -> assertFalse(orderApprovalRepository.existsById(savedOrder.getOrderApproval().getId()), "OrderApproval should be deleted: " + savedOrder.getOrderApproval().getId())
         );
     }
 
