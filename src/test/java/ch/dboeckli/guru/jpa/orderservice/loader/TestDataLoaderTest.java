@@ -1,6 +1,5 @@
 package ch.dboeckli.guru.jpa.orderservice.loader;
 
-import ch.dboeckli.guru.jpa.orderservice.repository.CustomerRepository;
 import ch.dboeckli.guru.jpa.orderservice.repository.OrderHeaderRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -16,9 +15,6 @@ class TestDataLoaderTest {
 
     @Autowired
     OrderHeaderRepository orderHeaderRepository;
-
-    @Autowired
-    CustomerRepository customerRepository;
 
     @Test
     void testDataLoader() {
