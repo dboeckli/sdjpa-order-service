@@ -22,7 +22,7 @@ public class TestDataLoader implements CommandLineRunner {
     final String PRODUCT_D2 = "Product 2";
     final String PRODUCT_D3 = "Product 3";
 
-    final String TEST_CUSTOMER = "TEST CUSTOMER";
+    public final static String TEST_CUSTOMER = "TEST CUSTOMER";
 
     public final static int ORDERS_TO_CREATE = 100;
 
