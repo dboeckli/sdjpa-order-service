@@ -24,6 +24,7 @@ create table customer
 create table order_header
 (
     id                 bigint not null auto_increment primary key,
+    version            integer,
     created_date       timestamp,
     last_modified_date timestamp,
     customer_id        bigint,
@@ -64,6 +65,7 @@ create table product
 create table order_line
 (
     id                 bigint not null auto_increment primary key,
+    version            integer,
     quantity_ordered   int,
     order_header_id    bigint,
     product_id         bigint,
