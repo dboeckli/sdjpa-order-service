@@ -88,4 +88,23 @@ class TestDataLoaderIT {
         });
         log.info("### No LazyInitializationException was thrown as expected");
     }
+
+    @Test
+    void testUpdateCustomer() {
+        Customer customer = new Customer();
+        customer.setCustomerName("Testing Version");
+        Customer savedCustomer = customerRepository.save(customer);
+        assertThat(savedCustomer.getVersion()).isGreaterThanOrEqualTo(0);
+        log.info("### Version is: " + savedCustomer.getVersion());
+
+        savedCustomer.setCustomerName("Testing Version 2");
+        Customer savedCustomer2 = customerRepository.save(customer);
+        assertThat(savedCustomer2.getVersion()).isGreaterThanOrEqualTo(1);
+        log.info("### Version is: " + savedCustomer2.getVersion());
+
+        savedCustomer2.setCustomerName("Testing Version 3");
+        Customer savedCustomer3 = customerRepository.save(savedCustomer2);
+        assertThat(savedCustomer3.getVersion()).isGreaterThanOrEqualTo(2);
+        log.info("### Version is: " + savedCustomer3.getVersion());
+    }
 }

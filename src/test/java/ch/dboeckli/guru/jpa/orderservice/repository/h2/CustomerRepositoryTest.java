@@ -26,6 +26,4 @@ class CustomerRepositoryTest {
 
         assertThat(savedCustomer1.getVersion()).isGreaterThanOrEqualTo(0);
     }
-
-
 }
