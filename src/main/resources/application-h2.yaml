@@ -59,7 +59,7 @@ management:
 logging:
   level:
     org.zalando.logbook: TRACE
-    lorg.hibernate.orm.jdbc.bind: TRACE
+    org.hibernate.orm.jdbc.bind: INFO
 
 logbook:
   filter:
