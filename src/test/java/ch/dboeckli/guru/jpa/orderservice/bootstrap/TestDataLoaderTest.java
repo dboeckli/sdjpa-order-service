@@ -66,4 +66,22 @@ class TestDataLoaderTest {
         }));
         log.info("### LazyInitializationException was thrown as expected");
     }
+
+    @Test
+    @Transactional
+    void testLazyLoadingWithTransactional() {
+        log.info("### Starting test for Lazy Loading");
+        Optional<Customer> customer = customerRepository.findCustomerByCustomerNameIgnoreCase(CUSTOMER_NAME_DEMO);
+        List<OrderHeader> orders = orderHeaderRepository.findAllByCustomer(customer.get());
+
+        OrderHeader orderHeader = orderHeaderRepository.findById(orders.getFirst().getId()).orElse(null);
+
+        orderHeader.getOrderLines().forEach(orderLine -> {
+            log.info("### Product Description: {}", orderLine.getProduct().getDescription());
+
+            // This should throw LazyInitializationException
+            orderLine.getProduct().getCategories().forEach(category -> log.info("### Category: {}", category.getDescription()));
+        });
+        log.info("### No LazyInitializationException was thrown as expected");
+    }
 }

@@ -35,10 +35,22 @@ public class TestDataLoader implements CommandLineRunner {
 
     private final ProductRepository productRepository;
 
+    private final BootstrapOrderService bootstrapOrderService;
+
     @Override
     public void run(String... args) {
         OrderHeader singleOrderHeader = createSingleOrderHeader();
-        demonstrateLazyLoading(singleOrderHeader.getId());
+
+        /*
+        demostation of following fact: https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/annotations.html
+        Method visibility and @Transactional in proxy mode
+
+        The @Transactional annotation is typically used on methods with public visibility. As of 6.0, protected or package-visible methods can also be made transactional for class-based proxies by default.
+        Note that transactional methods in interface-based proxies must always be public and defined in the proxied interface. For both kinds of proxies, only external method calls coming in through the proxy
+        are intercepted.
+         */
+        demonstrateLazyLoading(singleOrderHeader.getId()); // Demonstrate lazy loading with LazyInitializationException
+        bootstrapOrderService.demonstrateLazyLoading(singleOrderHeader.getId()); // Demonstrate lazy loading without LazyInitializationException
 
         log.info("### Loading test data...");
         List<Product> products = loadProducts();
