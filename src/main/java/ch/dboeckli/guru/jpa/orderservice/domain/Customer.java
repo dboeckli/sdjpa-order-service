@@ -3,6 +3,7 @@ package ch.dboeckli.guru.jpa.orderservice.domain;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Version;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,6 +18,9 @@ import java.util.Set;
 @Setter
 @ToString
 public class Customer extends BaseEntity {
+
+    @Version
+    private Integer version;
 
     private String customerName;
 

@@ -9,6 +9,7 @@ drop table if exists customer cascade;
 create table customer
 (
     id                 bigint not null auto_increment primary key,
+    version            integer,
     customer_name      varchar(50),
     address            varchar(30),
     city               varchar(30),
