@@ -58,7 +58,10 @@ management:
 logging:
   level:
     org.zalando.logbook: TRACE
-    lorg.hibernate.orm.jdbc.bind: TRACE
+    org.hibernate.orm.jdbc.bind: INFO
+    org.springframework.test.context.transaction: DEBUG
+    org.springframework.transaction: DEBUG
+    org.hibernate.SQL: INFO
 
 logbook:
   filter:

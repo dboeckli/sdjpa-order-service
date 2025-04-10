@@ -2,6 +2,14 @@
 
 This repository contains source code examples to support my course Spring Data JPA and Hibernate Beginner to Guru
 
+## Additional Resources
+
+For more information about transactions in database systems and Spring Data JPA, please refer to the following documents in the `doc` folder:
+
+- [Overview of DB Transactions](doc/OverviewOfDBTransactions.pdf): This document provides a comprehensive overview of database transactions.
+- [Spring Data JPA Transactions](doc/SpringDataJPATransactions.pdf): This guide offers insights into how transactions work specifically with Spring Data JPA.
+
+
 ## Flyway
 
 To enable Flyway in the MySQL profile, override the following properties when starting the application:

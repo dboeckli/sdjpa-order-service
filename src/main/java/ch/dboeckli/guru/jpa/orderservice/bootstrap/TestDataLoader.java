@@ -1,4 +1,4 @@
-package ch.dboeckli.guru.jpa.orderservice.loader;
+package ch.dboeckli.guru.jpa.orderservice.bootstrap;
 
 import ch.dboeckli.guru.jpa.orderservice.domain.*;
 import ch.dboeckli.guru.jpa.orderservice.repository.CustomerRepository;
@@ -6,6 +6,7 @@ import ch.dboeckli.guru.jpa.orderservice.repository.OrderHeaderRepository;
 import ch.dboeckli.guru.jpa.orderservice.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.LazyInitializationException;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,8 @@ import java.util.Random;
 @RequiredArgsConstructor
 @Slf4j
 public class TestDataLoader implements CommandLineRunner {
+
+    public static final String CUSTOMER_NAME_DEMO = "Customer For Single Order Demo";
 
     final String PRODUCT_D1 = "Product 1";
     final String PRODUCT_D2 = "Product 2";
@@ -34,6 +37,9 @@ public class TestDataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+        OrderHeader singleOrderHeader = createSingleOrderHeader();
+        demonstrateLazyLoading(singleOrderHeader.getId());
+
         log.info("### Loading test data...");
         List<Product> products = loadProducts();
         Customer customer = loadCustomers();
@@ -45,6 +51,49 @@ public class TestDataLoader implements CommandLineRunner {
 
         orderHeaderRepository.flush();
         log.info("### Test data loaded successfully! {} orders created.", ORDERS_TO_CREATE);
+    }
+
+    private OrderHeader createSingleOrderHeader() {
+        OrderHeader orderHeader = new OrderHeader();
+
+        Customer customer = new Customer();
+        customer.setCustomerName(CUSTOMER_NAME_DEMO);
+        Customer savedCustomer = customerRepository.save(customer);
+
+        orderHeader.setCustomer(savedCustomer);
+
+        Product newProduct = new Product();
+        newProduct.setProductStatus(ProductStatus.NEW);
+        newProduct.setDescription("Product For Single Order  Demo");
+        Product product = productRepository.saveAndFlush(newProduct);
+
+        OrderLine orderLine = new OrderLine();
+        orderLine.setQuantityOrdered(5);
+        orderLine.setProduct(product);
+
+        orderHeader.addOrderLine(orderLine);
+
+        OrderApproval approval = new OrderApproval();
+        approval.setApprovedBy("me");
+        orderHeader.setOrderApproval(approval);
+
+        OrderHeader savedOrder = orderHeaderRepository.save(orderHeader);
+        orderHeaderRepository.flush();
+        return savedOrder;
+    }
+
+    private void demonstrateLazyLoading(Long singleOrderHeaderId) {
+        OrderHeader orderHeader = orderHeaderRepository.findById(singleOrderHeaderId).orElse(null);
+        orderHeader.getOrderLines().forEach(orderLine -> {
+            log.info("### Product Description: {}", orderLine.getProduct().getDescription());
+
+            // here we get a lazy loading initializing exception
+            try {
+                orderLine.getProduct().getCategories().forEach(category -> log.info("### Category: {}", category.getDescription()));
+            } catch (LazyInitializationException ex) {
+                log.error("### Expected LazyInitializationException for demonstration", ex);
+            }
+        });
     }
 
     private void saveOrder(Customer customer, List<Product> products){
