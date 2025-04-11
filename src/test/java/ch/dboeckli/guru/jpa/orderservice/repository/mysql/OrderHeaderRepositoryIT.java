@@ -148,10 +148,14 @@ public class OrderHeaderRepositoryIT {
         Set<ConstraintViolation<?>> violations = exception.getConstraintViolations();
         assertAll("Customer Name and Phone Too Long Validation",
             () -> assertEquals(2, violations.size()),
-            () -> assertTrue(violations.stream().anyMatch(violation -> violation.getPropertyPath().toString().equals("customerName"))),
-            () -> assertTrue(violations.stream().anyMatch(violation -> violation.getMessage().equals("length must be between 0 and 50"))),
-            () -> assertTrue(violations.stream().anyMatch(violation -> violation.getPropertyPath().toString().equals("phone"))),
-            () -> assertTrue(violations.stream().anyMatch(violation -> violation.getMessage().equals("length must be between 0 and 20")))
+            () -> assertTrue(violations.stream().anyMatch(violation ->
+                violation.getPropertyPath().toString().equals("customerName") &&
+                violation.getMessage().equals("length must be between 0 and 50")
+            )),
+            () -> assertTrue(violations.stream().anyMatch(violation ->
+                violation.getPropertyPath().toString().equals("phone") &&
+                violation.getMessage().equals("length must be between 0 and 20")
+            ))
         );
     }
 
