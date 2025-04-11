@@ -9,6 +9,7 @@ drop table if exists customer cascade;
 create table customer
 (
     id                 bigint not null auto_increment primary key,
+    version            integer not null,
     customer_name      varchar(50),
     address            varchar(30),
     city               varchar(30),
@@ -23,6 +24,7 @@ create table customer
 create table order_header
 (
     id                 bigint not null auto_increment primary key,
+    version            integer not null,
     created_date       timestamp,
     last_modified_date timestamp,
     customer_id        bigint,
@@ -63,6 +65,7 @@ create table product
 create table order_line
 (
     id                 bigint not null auto_increment primary key,
+    version            integer not null,
     quantity_ordered   int,
     order_header_id    bigint,
     product_id         bigint,

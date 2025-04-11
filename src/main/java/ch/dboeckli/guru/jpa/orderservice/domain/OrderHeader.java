@@ -52,6 +52,9 @@ import java.util.Set;
 })
 public class OrderHeader extends BaseEntity {
 
+    @Version
+    private Integer version;
+
     @ManyToOne
     private Customer customer;
 
