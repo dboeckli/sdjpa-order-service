@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Slf4j
-public class ProductRepositoryIT {
+class ProductRepositoryIT {
 
     @Autowired
     ProductRepository productRepository;
