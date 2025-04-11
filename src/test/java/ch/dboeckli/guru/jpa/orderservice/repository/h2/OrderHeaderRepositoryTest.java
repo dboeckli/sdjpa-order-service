@@ -3,6 +3,7 @@ package ch.dboeckli.guru.jpa.orderservice.repository.h2;
 import ch.dboeckli.guru.jpa.orderservice.domain.*;
 import ch.dboeckli.guru.jpa.orderservice.repository.*;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
+import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -35,8 +37,15 @@ public class OrderHeaderRepositoryTest {
 
     Product product;
 
+    @BeforeAll
+    public static void setDefaultLocale() {
+        Locale.setDefault(Locale.US);
+    }
+
     @BeforeEach
     void setUp() {
+        Locale.setDefault(Locale.ENGLISH);
+
         Product newProduct = new Product();
         newProduct.setProductStatus(ProductStatus.NEW);
         newProduct.setDescription("test product");
