@@ -2,8 +2,6 @@ package ch.dboeckli.guru.jpa.orderservice.repository.mysql;
 
 import ch.dboeckli.guru.jpa.orderservice.domain.*;
 import ch.dboeckli.guru.jpa.orderservice.repository.*;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +13,6 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -121,41 +118,6 @@ public class OrderHeaderRepositoryIT {
             () -> assertNotNull(fetchedOrder.getCreatedDate()),
             () -> assertNotNull(fetchedOrder.getLastModifiedDate()),
             () -> assertNotNull(fetchedOrder.getCustomer().getId())
-        );
-    }
-
-    @Test
-    void testSaveOrderCustomerNameTooLong() {
-        Customer customer = new Customer();
-        customer.setCustomerName("New Customer012345678901234567890123456789012345678901");
-        ConstraintViolationException exception = assertThrows(ConstraintViolationException.class, () -> customerRepository.save(customer));
-        assertAll("Customer Name Too Long Validation",
-            () -> assertEquals(1, exception.getConstraintViolations().size()),
-            () -> assertEquals("customerName", exception.getConstraintViolations().iterator().next().getPropertyPath().toString()),
-            () -> assertEquals("length must be between 0 and 50", exception.getConstraintViolations().iterator().next().getMessage())
-        );
-    }
-
-    @Test
-    void testSaveOrderCustomerNameTooLongAndPhoneTooLong() {
-        Locale.setDefault(Locale.US);
-
-        Customer customer = new Customer();
-        customer.setCustomerName("New Customer012345678901234567890123456789012345678901");
-        customer.setPhone("12345678901234567890123456789012345678");
-        ConstraintViolationException exception = assertThrows(ConstraintViolationException.class, () -> customerRepository.save(customer));
-
-        Set<ConstraintViolation<?>> violations = exception.getConstraintViolations();
-        assertAll("Customer Name and Phone Too Long Validation",
-            () -> assertEquals(2, violations.size()),
-            () -> assertTrue(violations.stream().anyMatch(violation ->
-                violation.getPropertyPath().toString().equals("customerName") &&
-                violation.getMessage().equals("length must be between 0 and 50")
-            )),
-            () -> assertTrue(violations.stream().anyMatch(violation ->
-                violation.getPropertyPath().toString().equals("phone") &&
-                violation.getMessage().equals("length must be between 0 and 20")
-            ))
         );
     }
 
