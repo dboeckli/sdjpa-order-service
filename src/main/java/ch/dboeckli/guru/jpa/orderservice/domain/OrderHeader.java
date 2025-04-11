@@ -91,31 +91,4 @@ public class OrderHeader extends BaseEntity {
         orderLines.add(orderLine);
         orderLine.setOrderHeader(this);
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof OrderHeader that)) return false;
-        if (!super.equals(o)) return false;
-
-        if (getCustomer() != null ? !getCustomer().equals(that.getCustomer()) : that.getCustomer() != null)
-            return false;
-        if (getShippingAddress() != null ? !getShippingAddress().equals(that.getShippingAddress()) : that.getShippingAddress() != null)
-            return false;
-        if (getBillToAddress() != null ? !getBillToAddress().equals(that.getBillToAddress()) : that.getBillToAddress() != null)
-            return false;
-        if (getOrderStatus() != that.getOrderStatus()) return false;
-        return getOrderLines() != null ? getOrderLines().equals(that.getOrderLines()) : that.getOrderLines() == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (getCustomer() != null ? getCustomer().hashCode() : 0);
-        result = 31 * result + (getShippingAddress() != null ? getShippingAddress().hashCode() : 0);
-        result = 31 * result + (getBillToAddress() != null ? getBillToAddress().hashCode() : 0);
-        result = 31 * result + (getOrderStatus() != null ? getOrderStatus().hashCode() : 0);
-        result = 31 * result + (getOrderLines() != null ? getOrderLines().hashCode() : 0);
-        return result;
-    }
 }

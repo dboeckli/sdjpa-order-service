@@ -42,5 +42,4 @@ public class Customer extends BaseEntity {
     @OneToMany(mappedBy = "customer")
     @ToString.Exclude
     private Set<OrderHeader> orders = new LinkedHashSet<>();
-
 }
