@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Slf4j
-public class OrderHeaderRepositoryIT {
+class OrderHeaderRepositoryIT {
 
     @Autowired
     OrderHeaderRepository orderHeaderRepository;

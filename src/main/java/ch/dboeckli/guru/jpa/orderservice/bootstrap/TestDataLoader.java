@@ -21,13 +21,13 @@ public class TestDataLoader implements CommandLineRunner {
 
     public static final String CUSTOMER_NAME_DEMO = "Customer For Single Order Demo";
 
-    final String PRODUCT_D1 = "Product 1";
-    final String PRODUCT_D2 = "Product 2";
-    final String PRODUCT_D3 = "Product 3";
+    final static String PRODUCT_D1 = "Product 1";
+    final static String PRODUCT_D2 = "Product 2";
+    final static String PRODUCT_D3 = "Product 3";
 
-    public final static String TEST_CUSTOMER = "TEST CUSTOMER";
+    public static final String TEST_CUSTOMER = "TEST CUSTOMER";
 
-    public final static int ORDERS_TO_CREATE = 100;
+    public static final int ORDERS_TO_CREATE = 100;
 
     private final OrderHeaderRepository orderHeaderRepository;
 
