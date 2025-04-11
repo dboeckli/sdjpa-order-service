@@ -56,7 +56,7 @@ alter table order_header add constraint order_approval_fk foreign key (order_app
 create table product
 (
     id                 bigint not null auto_increment primary key,
-    quantity_on_hand   integer,
+    quantity_on_hand   integer default 0,
     created_date       timestamp,
     last_modified_date timestamp,
     description        varchar(100),

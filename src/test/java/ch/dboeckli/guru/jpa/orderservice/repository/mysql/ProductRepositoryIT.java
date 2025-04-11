@@ -60,4 +60,19 @@ public class ProductRepositoryIT {
         );
     }
 
+    @Test
+    void addAndUpdateProduct() {
+        Product product = new Product();
+        product.setDescription("My Product");
+        product.setProductStatus(ProductStatus.NEW);
+
+        Product savedProduct = productRepository.saveAndFlush(product);
+        assertEquals(0, savedProduct.getQuantityOnHand());
+
+        savedProduct.setQuantityOnHand(25);
+
+        Product savedProduct2 = productRepository.saveAndFlush(savedProduct);
+        assertEquals(25, savedProduct2.getQuantityOnHand());
+    }
+
 }
