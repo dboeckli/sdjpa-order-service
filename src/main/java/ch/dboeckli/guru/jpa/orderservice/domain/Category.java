@@ -27,20 +27,4 @@ public class Category extends BaseEntity {
         inverseJoinColumns = @JoinColumn(name = "product_id"))
     @ToString.Exclude
     private Set<Product> products;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Category category)) return false;
-        if (!super.equals(o)) return false;
-
-        return getDescription() != null ? getDescription().equals(category.getDescription()) : category.getDescription() == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (getDescription() != null ? getDescription().hashCode() : 0);
-        return result;
-    }
 }

@@ -126,4 +126,40 @@ class CustomerRepositoryIT {
             ))
         );
     }
+
+    @Test
+    void equalsAndHashCodeTestWithProxy() {
+        Customer saved = customerRepository.save(new Customer());
+
+        Customer customer = customerRepository.findById(saved.getId()).orElseThrow();
+        Customer customerProxy = customerRepository.getReferenceById(saved.getId());
+
+        assertEquals(customer, customerProxy);
+        assertEquals(customerProxy, customer);
+        assertEquals(customer.hashCode(), customerProxy.hashCode());
+    }
+
+    @Test
+    void testNotEqualsWithDifferentIds() {
+        Customer customer1 = customerRepository.save(new Customer());
+        Customer customer2 = customerRepository.save(new Customer());
+
+        assertNotEquals(customer1, customer2);
+    }
+
+    @Test
+    void testEqualsWithNullAndOtherClass() {
+        Customer customer = customerRepository.save(new Customer());
+
+        assertNotEquals(null, customer);
+        assertNotEquals(new Object(), customer);
+    }
+
+    @Test
+    void testHashCodeConsistency() {
+        Customer customer = customerRepository.save(new Customer());
+        int hashCode1 = customer.hashCode();
+        int hashCode2 = customer.hashCode();
+        assertEquals(hashCode1, hashCode2);
+    }
 }

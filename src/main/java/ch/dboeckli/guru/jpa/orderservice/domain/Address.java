@@ -4,6 +4,9 @@ import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.proxy.HibernateProxy;
+
+import java.util.Objects;
 
 @Embeddable
 @Getter
@@ -23,23 +26,24 @@ public class Address {
     private String zipCode;
 
     @Override
-    public boolean equals(Object o) {
+    public final boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Address address1)) return false;
-
-        if (getAddress() != null ? !getAddress().equals(address1.getAddress()) : address1.getAddress() != null)
-            return false;
-        if (getCity() != null ? !getCity().equals(address1.getCity()) : address1.getCity() != null) return false;
-        if (getState() != null ? !getState().equals(address1.getState()) : address1.getState() != null) return false;
-        return getZipCode() != null ? getZipCode().equals(address1.getZipCode()) : address1.getZipCode() == null;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        Address address1 = (Address) o;
+        return getAddress() != null && Objects.equals(getAddress(), address1.getAddress())
+            && getCity() != null && Objects.equals(getCity(), address1.getCity())
+            && getState() != null && Objects.equals(getState(), address1.getState())
+            && getZipCode() != null && Objects.equals(getZipCode(), address1.getZipCode());
     }
 
     @Override
-    public int hashCode() {
-        int result = getAddress() != null ? getAddress().hashCode() : 0;
-        result = 31 * result + (getCity() != null ? getCity().hashCode() : 0);
-        result = 31 * result + (getState() != null ? getState().hashCode() : 0);
-        result = 31 * result + (getZipCode() != null ? getZipCode().hashCode() : 0);
-        return result;
+    public final int hashCode() {
+        return Objects.hash(address,
+            city,
+            state,
+            zipCode);
     }
 }

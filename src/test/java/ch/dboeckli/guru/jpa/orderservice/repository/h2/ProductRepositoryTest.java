@@ -72,4 +72,40 @@ public class ProductRepositoryTest {
         assertEquals(25, savedProduct2.getQuantityOnHand());
     }
 
+    @Test
+    void equalsAndHashCodeTestWithProxy() {
+        Product saved = productRepository.save(new Product());
+
+        Product product = productRepository.findById(saved.getId()).orElseThrow();
+        Product productProxy = productRepository.getReferenceById(saved.getId());
+
+        assertEquals(product, productProxy);
+        assertEquals(productProxy, product);
+        assertEquals(product.hashCode(), productProxy.hashCode());
+    }
+
+    @Test
+    void testNotEqualsWithDifferentIds() {
+        Product product1 = productRepository.save(new Product());
+        Product product2 = productRepository.save(new Product());
+
+        assertNotEquals(product1, product2);
+    }
+
+    @Test
+    void testEqualsWithNullAndOtherClass() {
+        Product product = productRepository.save(new Product());
+
+        assertNotEquals(null, product);
+        assertNotEquals(new Object(), product);
+    }
+
+    @Test
+    void testHashCodeConsistency() {
+        Product product = productRepository.save(new Product());
+        int hashCode1 = product.hashCode();
+        int hashCode2 = product.hashCode();
+        assertEquals(hashCode1, hashCode2);
+    }
+
 }
