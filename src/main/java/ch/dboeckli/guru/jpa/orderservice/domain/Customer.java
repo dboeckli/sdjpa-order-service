@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.validator.constraints.Length;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -22,12 +23,15 @@ public class Customer extends BaseEntity {
     @Version
     private Integer version;
 
+    @Length(max = 50)
     private String customerName;
 
     @Embedded
     private Address address;
 
+    @Length(max = 20)
     private String phone;
+
     private String email;
 
     @OneToMany(mappedBy = "customer")
