@@ -1,14 +1,14 @@
-insert into product (description, product_status, created_date, last_modified_date)
-values ('PRODUCT1', 'NEW', now(), now());
+insert into product (description, product_status, created_date, last_modified_date, quantity_on_hand)
+values ('PRODUCT1', 'NEW', now(), now(), 0);
 
-insert into product (description, product_status, created_date, last_modified_date)
-values ('PRODUCT2', 'NEW', now(), now());
+insert into product (description, product_status, created_date, last_modified_date, quantity_on_hand)
+values ('PRODUCT2', 'NEW', now(), now(), 0);
 
-insert into product (description, product_status, created_date, last_modified_date)
-values ('PRODUCT3', 'NEW', now(), now());
+insert into product (description, product_status, created_date, last_modified_date, quantity_on_hand)
+values ('PRODUCT3', 'NEW', now(), now(), 0);
 
-insert into product (description, product_status, created_date, last_modified_date)
-values ('PRODUCT4', 'NEW', now(), now());
+insert into product (description, product_status, created_date, last_modified_date, quantity_on_hand)
+values ('PRODUCT4', 'NEW', now(), now(), 0);
 
 insert into category (description, created_date, last_modified_date) VALUES
     ('CAT1', now(), now());
