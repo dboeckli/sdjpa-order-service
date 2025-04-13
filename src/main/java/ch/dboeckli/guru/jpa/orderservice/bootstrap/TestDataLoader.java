@@ -10,9 +10,9 @@ import org.hibernate.LazyInitializationException;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 @Component
 @RequiredArgsConstructor
@@ -115,7 +115,7 @@ public class TestDataLoader implements CommandLineRunner {
         products.forEach(product -> {
             OrderLine orderLine = new OrderLine();
             orderLine.setProduct(product);
-            orderLine.setQuantityOrdered(ThreadLocalRandom.current().nextInt(20));
+            orderLine.setQuantityOrdered(new SecureRandom().nextInt(20));
             orderHeader.addOrderLine(orderLine);
         });
         orderHeaderRepository.save(orderHeader);
