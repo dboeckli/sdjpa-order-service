@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Component
 @RequiredArgsConstructor
@@ -21,9 +21,9 @@ public class TestDataLoader implements CommandLineRunner {
 
     public static final String CUSTOMER_NAME_DEMO = "Customer For Single Order Demo";
 
-    final static String PRODUCT_D1 = "Product 1";
-    final static String PRODUCT_D2 = "Product 2";
-    final static String PRODUCT_D3 = "Product 3";
+    static final String PRODUCT_D1 = "Product 1";
+    static final String PRODUCT_D2 = "Product 2";
+    static final String PRODUCT_D3 = "Product 3";
 
     public static final String TEST_CUSTOMER = "TEST CUSTOMER";
 
@@ -109,15 +109,13 @@ public class TestDataLoader implements CommandLineRunner {
     }
 
     private void saveOrder(Customer customer, List<Product> products){
-        Random random = new Random();
-
         OrderHeader orderHeader = new OrderHeader();
         orderHeader.setCustomer(customer);
 
         products.forEach(product -> {
             OrderLine orderLine = new OrderLine();
             orderLine.setProduct(product);
-            orderLine.setQuantityOrdered(random.nextInt(20));
+            orderLine.setQuantityOrdered(ThreadLocalRandom.current().nextInt(20));
             orderHeader.addOrderLine(orderLine);
         });
         orderHeaderRepository.save(orderHeader);
