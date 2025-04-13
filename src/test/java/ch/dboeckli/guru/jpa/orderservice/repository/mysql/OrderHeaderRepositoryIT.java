@@ -3,7 +3,6 @@ package ch.dboeckli.guru.jpa.orderservice.repository.mysql;
 import ch.dboeckli.guru.jpa.orderservice.domain.*;
 import ch.dboeckli.guru.jpa.orderservice.repository.*;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
-import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -38,11 +36,6 @@ class OrderHeaderRepositoryIT {
     OrderApprovalRepository orderApprovalRepository;
 
     Product product;
-
-    @BeforeAll
-    public static void setDefaultLocale() {
-        Locale.setDefault(Locale.US);
-    }
 
     @BeforeEach
     void setUp() {
