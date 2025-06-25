@@ -1,0 +1,17 @@
+global:
+  namespace: sdjpa-order-service-mysql
+
+mysql:
+  port: 3306
+  targetPort: 3306
+  nodePort: 30306
+  
+  database: "orderservicedb"
+
+  adminUser: orderadmin
+  adminPassword: password
+
+  user: orderuser
+  password: password
+
+  rootPassword: password
