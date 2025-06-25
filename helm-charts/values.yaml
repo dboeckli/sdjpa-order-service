@@ -47,10 +47,10 @@ mysql:
   database: orderservicedb
   port: 3306
 
-  adminUser: bookadmin
+  adminUser: orderadmin
   adminPassword: password
 
-  user: bookuser
+  user: orderuser
   password: password
 
   rootPassword: password
