@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.3</version>
+        <version>3.5.4</version>
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
 
@@ -558,7 +558,6 @@
                         <id>start-springboot-app</id>
                         <goals>
                             <goal>start</goal>
-                            <goal>stop</goal>
                         </goals>
                         <phase>post-integration-test</phase>
                         <configuration>
@@ -571,6 +570,18 @@
                                 <argument>--server.port=${tomcat.http.port}</argument>
                                 <argument>--spring.cloud.kubernetes.enabled=false</argument>
                             </arguments>
+                            <jmxPort>${jmx.server.port}</jmxPort>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>stop-springboot-app</id>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                        <phase>post-integration-test</phase>
+                        <configuration>
+                            <skip>${skip.start.stop.springboot}</skip>
                             <jmxPort>${jmx.server.port}</jmxPort>
                         </configuration>
                     </execution>
@@ -750,6 +761,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
+                    <skipAfterFailureCount>1</skipAfterFailureCount>
+                    <testFailureIgnore>false</testFailureIgnore>
                     <!--suppress UnresolvedMavenProperty. argline is set by jacoco -->
                     <argLine>${argLine} -XX:+EnableDynamicAgentLoading -Xshare:off</argLine>
                 </configuration>
