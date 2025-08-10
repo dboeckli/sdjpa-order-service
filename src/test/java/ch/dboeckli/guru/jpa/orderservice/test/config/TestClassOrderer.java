@@ -14,7 +14,7 @@ public class TestClassOrderer implements ClassOrderer {
 
     private static int getOrder(ClassDescriptor classDescriptor) {
         String className = classDescriptor.getDisplayName();
-        if (className.endsWith("Test")) {
+        if (className.endsWith("Test") || className.endsWith("Tests")) {
             return 1;
         } else if (className.endsWith("IT")) {
             return 2;
