@@ -1,10 +1,13 @@
 package ch.dboeckli.guru.jpa.orderservice.bootstrap;
 
-import ch.dboeckli.guru.jpa.orderservice.domain.*;
+import ch.dboeckli.guru.jpa.orderservice.domain.Address;
+import ch.dboeckli.guru.jpa.orderservice.domain.Customer;
+import ch.dboeckli.guru.jpa.orderservice.domain.OrderHeader;
 import ch.dboeckli.guru.jpa.orderservice.repository.CustomerRepository;
 import ch.dboeckli.guru.jpa.orderservice.repository.OrderHeaderRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.LazyInitializationException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,7 +15,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 import static ch.dboeckli.guru.jpa.orderservice.bootstrap.TestDataLoader.CUSTOMER_NAME_DEMO;
 import static ch.dboeckli.guru.jpa.orderservice.bootstrap.TestDataLoader.ORDERS_TO_CREATE;
@@ -41,7 +43,9 @@ class TestDataLoaderTest {
         log.info("### Starting test with DB lock");
         Long id = 55L;
 
-        OrderHeader orderHeader = orderHeaderRepository.findById(id).get();
+        OrderHeader orderHeader = orderHeaderRepository.findById(id)
+            .orElseThrow(() -> new AssertionError("OrderHeader with ID " + id + " not found"));
+
 
         Address billTo = new Address();
         billTo.setAddress("Bill me");
@@ -55,17 +59,22 @@ class TestDataLoaderTest {
     // Remove @Transactional to ensure lazy loading exception occurs
     void testLazyLoading() {
         log.info("### Starting test for Lazy Loading");
-        Optional<Customer> customer = customerRepository.findCustomerByCustomerNameIgnoreCase(CUSTOMER_NAME_DEMO);
-        List<OrderHeader> orders = orderHeaderRepository.findAllByCustomer(customer.get());
+        Customer customer = customerRepository.findCustomerByCustomerNameIgnoreCase(CUSTOMER_NAME_DEMO)
+            .orElseThrow(() -> new AssertionError("Customer '" + CUSTOMER_NAME_DEMO + "' not found"));
+
+        List<OrderHeader> orders = orderHeaderRepository.findAllByCustomer(customer);
 
         OrderHeader orderHeader = orderHeaderRepository.findById(orders.getFirst().getId()).orElse(null);
 
-        assertThrows(LazyInitializationException.class, () -> orderHeader.getOrderLines().forEach(orderLine -> {
-            log.info("### Product Description: {}", orderLine.getProduct().getDescription());
+        assertThrows(LazyInitializationException.class, () -> {
+            Assertions.assertNotNull(orderHeader);
+            orderHeader.getOrderLines().forEach(orderLine -> {
+                log.info("### Product Description: {}", orderLine.getProduct().getDescription());
 
-            // This should throw LazyInitializationException
-            orderLine.getProduct().getCategories().forEach(category -> log.info("### Category: {}", category.getDescription()));
-        }));
+                // This should throw LazyInitializationException
+                orderLine.getProduct().getCategories().forEach(category -> log.info("### Category: {}", category.getDescription()));
+            });
+        });
         log.info("### LazyInitializationException was thrown as expected");
     }
 
@@ -73,11 +82,13 @@ class TestDataLoaderTest {
     @Transactional
     void testLazyLoadingWithTransactional() {
         log.info("### Starting test for Lazy Loading");
-        Optional<Customer> customer = customerRepository.findCustomerByCustomerNameIgnoreCase(CUSTOMER_NAME_DEMO);
-        List<OrderHeader> orders = orderHeaderRepository.findAllByCustomer(customer.get());
+        Customer customer = customerRepository.findCustomerByCustomerNameIgnoreCase(CUSTOMER_NAME_DEMO)
+            .orElseThrow(() -> new AssertionError("Customer '" + CUSTOMER_NAME_DEMO + "' not found"));
+        List<OrderHeader> orders = orderHeaderRepository.findAllByCustomer(customer);
 
         OrderHeader orderHeader = orderHeaderRepository.findById(orders.getFirst().getId()).orElse(null);
 
+        Assertions.assertNotNull(orderHeader);
         orderHeader.getOrderLines().forEach(orderLine -> {
             log.info("### Product Description: {}", orderLine.getProduct().getDescription());
 
