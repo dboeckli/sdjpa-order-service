@@ -49,7 +49,9 @@ public class TestDataLoader implements CommandLineRunner {
         Note that transactional methods in interface-based proxies must always be public and defined in the proxied interface. For both kinds of proxies, only external method calls coming in through the proxy
         are intercepted.
          */
+        log.info("### demonstrateLazyLoading 1...");
         demonstrateLazyLoading(singleOrderHeader.getId()); // Demonstrate lazy loading with LazyInitializationException
+        log.info("### demonstrateLazyLoading 2...");
         bootstrapOrderService.demonstrateLazyLoading(singleOrderHeader.getId()); // Demonstrate lazy loading without LazyInitializationException
 
         log.info("### Loading test data...");
@@ -62,7 +64,7 @@ public class TestDataLoader implements CommandLineRunner {
         }
 
         orderHeaderRepository.flush();
-        log.info("### Test data loaded successfully! {} orders created.", ORDERS_TO_CREATE);
+        log.info("### Test data loaded successfully! orders to create {}, created {}.", ORDERS_TO_CREATE, orderHeaderRepository.count());
     }
 
     private OrderHeader createSingleOrderHeader() {

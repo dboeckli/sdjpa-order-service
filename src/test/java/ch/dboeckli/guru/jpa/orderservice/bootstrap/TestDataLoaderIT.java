@@ -38,7 +38,7 @@ class TestDataLoaderIT {
     }
 
     @Test
-    @Transactional // this way all changes are rolled back after the test. with @DataJpaTest it's enabled by default
+    @Transactional // this way all changes are rolled back after the test. with @DataJpaTest, it's enabled by default
     void testDBLock() {
         log.info("### Starting test with DB lock");
         Long id = 55L;
