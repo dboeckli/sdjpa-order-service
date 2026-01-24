@@ -1,5 +1,6 @@
 package ch.dboeckli.guru.jpa.orderservice.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -23,6 +24,7 @@ import java.util.Set;
 public class Customer extends BaseEntity {
 
     @Version
+    @Column(nullable = false)
     private Integer version;
 
     @Size(max = 50)
