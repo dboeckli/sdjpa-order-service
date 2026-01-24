@@ -51,6 +51,7 @@ import java.util.Set;
 public class OrderHeader extends BaseEntity {
 
     @Version
+    @Column(nullable = false)
     private Integer version;
 
     @ManyToOne

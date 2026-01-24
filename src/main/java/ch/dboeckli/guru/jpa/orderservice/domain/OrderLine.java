@@ -1,5 +1,6 @@
 package ch.dboeckli.guru.jpa.orderservice.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Version;
@@ -16,6 +17,7 @@ import lombok.ToString;
 public class OrderLine extends BaseEntity {
 
     @Version
+    @Column(nullable = false)
     private Integer version;
 
     private Integer quantityOrdered;
