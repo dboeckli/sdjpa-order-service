@@ -1,21 +1,125 @@
 # Spring Data JPA Order Service
 
-This repository contains source code examples to support my course Spring Data JPA and Hibernate Beginner to Guru.
+Spring Boot 4 / Spring Data JPA capstone project on Java 25, implementing an order service with
+customers, products, categories, orders, order lines and order approvals. It demonstrates JPA
+relationship mappings (1:N, bidirectional 1:1, M:N via join table), embedded types, optimistic
+locking and entity timestamps against H2 (MySQL-compat mode) or MySQL with Flyway schema
+management, and ships as a Docker/Helm deployment to Kubernetes with W3C tracing and contextual
+logging. Source code examples to support my course Spring Data JPA and Hibernate Beginner to Guru.
 
-## Additional Resources
+## Architecture Overview
 
-For more information about transactions in database systems and Spring Data JPA, please refer to the following documents in the `doc` folder:
+```mermaid
+graph LR
+    Client(["Client"])
 
-- [Overview of DB Transactions](doc/OverviewOfDBTransactions.pdf): This document provides a comprehensive overview of database transactions.
-- [Spring Data JPA Transactions](doc/SpringDataJPATransactions.pdf): This guide offers insights into how transactions work specifically with Spring Data JPA.
+    subgraph App ["Spring Boot App :8080 (k8s :30080)"]
+        Bootstrap["BootstrapOrderService\n(TestDataLoader, seed data)"]
+        Service["ProductService\nProductServiceImpl"]
+        Repos["Spring Data JPA\nRepositories"]
+        Observability["RequestLoggingConfig\nW3C tracing, MDC"]
+    end
+
+    subgraph Domain ["Capstone Domain Model"]
+        Orders["OrderHeader / OrderLine /\nOrderApproval"]
+        Party["Customer\n(Address embedded)"]
+        Catalog["Product / Category"]
+    end
+
+    subgraph Migration ["Schema Management"]
+        Flyway["Flyway\ndb/migration V2.0-V15.0"]
+    end
+
+    subgraph Databases ["Databases"]
+        H2[("H2\nIn-Memory (h2 profile)")]
+        MySQL[("MySQL\nDocker Compose (mysql profile)")]
+    end
+
+    Client -->|"actuator"| App
+    Bootstrap --> Service
+    Bootstrap --> Repos
+    Service --> Repos
+    Repos --> Domain
+    Repos <--> H2
+    Repos <--> MySQL
+    Flyway --> MySQL
+```
+
+## Database Schema
+
+```mermaid
+erDiagram
+    customer {
+        BIGINT       id PK "auto_increment"
+        INTEGER      version "optimistic lock"
+        VARCHAR(50)  customer_name
+        VARCHAR(30)  address "embedded"
+        VARCHAR(30)  city "embedded"
+        VARCHAR(30)  state "embedded"
+        VARCHAR(30)  zip_code "embedded"
+        VARCHAR(20)  phone
+        VARCHAR(255) email
+    }
+
+    order_header {
+        BIGINT      id PK "auto_increment"
+        INTEGER     version "optimistic lock"
+        BIGINT      customer_id FK
+        VARCHAR(30) order_status "enum: NEW, IN_PROCESS, COMPLETE"
+        VARCHAR(30) shipping_address "embedded"
+        VARCHAR(30) shipping_city "embedded"
+        VARCHAR(30) shipping_state "embedded"
+        VARCHAR(30) shipping_zip_code "embedded"
+        VARCHAR(30) bill_to_address "embedded"
+        VARCHAR(30) bill_to_city "embedded"
+        VARCHAR(30) bill_to_state "embedded"
+        VARCHAR(30) bill_to_zip_code "embedded"
+        BIGINT      order_approval_id FK
+    }
+
+    order_line {
+        BIGINT  id PK "auto_increment"
+        INTEGER version "optimistic lock"
+        INTEGER quantity_ordered
+        BIGINT  order_header_id FK
+        BIGINT  product_id FK
+    }
+
+    product {
+        BIGINT       id PK "auto_increment"
+        INTEGER      version "optimistic lock"
+        VARCHAR(255) description
+        VARCHAR(30)  product_status "enum: NEW, IN_STOCK, DISCONTINUED"
+        INTEGER      quantity_on_hand
+    }
+
+    category {
+        BIGINT       id PK "auto_increment"
+        INTEGER      version "optimistic lock"
+        VARCHAR(255) description
+    }
+
+    order_approval {
+        BIGINT       id PK "auto_increment"
+        INTEGER      version "optimistic lock"
+        VARCHAR(255) approved_by
+        BIGINT       order_header_id FK
+    }
+
+    customer     ||--o{ order_header   : "customer_id"
+    order_header ||--o{ order_line     : "order_header_id"
+    order_header ||--o| order_approval : "order_approval_id"
+    product      ||--o{ order_line     : "product_id"
+    product      }o--o{ category       : "product_category"
+```
 
 ## Flyway
 
-To enable Flyway in the MySQL profile, override the following properties when starting the application:
+The MySQL profile enables Flyway out of the box — the following properties are already set in `application-mysql.yaml`:
 - `spring.flyway.enabled = true`
 - `spring.docker.compose.file = compose-mysql.yaml`
 
-This profile starts MySQL on port 3306 using the Docker Compose file `compose-mysql-.yaml`.
+This profile starts MySQL on port 3306 using the Docker Compose file `compose-mysql.yaml`.
 
 ## Docker
 
