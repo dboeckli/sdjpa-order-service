@@ -1,3 +1,6 @@
+nameOverride: "sdjpa-order-service"
+fullnameOverride: "sdjpa-order-service"
+
 global:
   timezone: Europe/Zurich
   timezonePath: /etc/localtime
@@ -46,8 +49,12 @@ probes:
 mysql:
   enabled: true
 
+  fullnameOverride: sdjpa-order-service-mysql
   database: orderservicedb
+
   port: 3306
+  targetPort: 3306
+  nodePort: 30306
 
   adminUser: orderadmin
   adminPassword: password
@@ -57,7 +64,7 @@ mysql:
 
   rootPassword: password
 
-  serviceFQDN: "sdjpa-order-service-sdjpa-order-service-mysql.sdjpa-order-service.svc.cluster.local"
+  serviceFQDN: "sdjpa-order-service-mysql.sdjpa-order-service.svc.cluster.local"
 
 ingress:
   enabled: false

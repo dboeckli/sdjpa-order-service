@@ -38,7 +38,8 @@ class TestDataLoaderIT {
     }
 
     @Test
-    @Transactional // this way all changes are rolled back after the test. with @DataJpaTest, it's enabled by default
+    @Transactional // this way all changes are rolled back after the test. with
+                   // @DataJpaTest, it's enabled by default
     void testDBLock() {
         log.info("### Starting test with DB lock");
         Long id = 55L;
@@ -66,7 +67,9 @@ class TestDataLoaderIT {
             log.info("### Product Description: {}", orderLine.getProduct().getDescription());
 
             // This should throw LazyInitializationException
-            orderLine.getProduct().getCategories().forEach(category -> log.info("### Category: {}", category.getDescription()));
+            orderLine.getProduct()
+                .getCategories()
+                .forEach(category -> log.info("### Category: {}", category.getDescription()));
         }));
         log.info("### LazyInitializationException was thrown as expected");
     }
@@ -84,7 +87,9 @@ class TestDataLoaderIT {
             log.info("### Product Description: {}", orderLine.getProduct().getDescription());
 
             // This should throw LazyInitializationException
-            orderLine.getProduct().getCategories().forEach(category -> log.info("### Category: {}", category.getDescription()));
+            orderLine.getProduct()
+                .getCategories()
+                .forEach(category -> log.info("### Category: {}", category.getDescription()));
         });
         log.info("### No LazyInitializationException was thrown as expected");
     }
@@ -107,4 +112,5 @@ class TestDataLoaderIT {
         assertThat(savedCustomer3.getVersion()).isGreaterThanOrEqualTo(2);
         log.info("### Version is: " + savedCustomer3.getVersion());
     }
+
 }

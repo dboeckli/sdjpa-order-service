@@ -8,7 +8,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class AddressTest {
 
     private Address address1;
+
     private Address address2;
+
     private Address address3;
 
     @BeforeEach
@@ -34,27 +36,27 @@ class AddressTest {
 
     @Test
     void testEquals() {
-        assertAll(
-            () -> assertEquals(address1, address2, "Equal addresses should be equal"),
-            () -> assertNotEquals(address1, address3, "Different addresses should not be equal"),
-            () -> assertNotEquals(null, address1, "Address should not be equal to null"),
-            () -> assertEquals(address1, address1, "Address should be equal to itself"),
-            () -> assertAll("Symmetry test",
-                () -> assertEquals(address1, address2),
-                () -> assertEquals(address2, address1)
-            ),
-            () -> assertNotEquals(new Object(), address1, "Address should not be equal to object of different type")
-        );
+        assertAll(() -> assertEquals(address1, address2, "Equal addresses should be equal"),
+                () -> assertNotEquals(address1, address3, "Different addresses should not be equal"),
+                () -> assertNotEquals(null, address1, "Address should not be equal to null"),
+                () -> assertEquals(address1, address1, "Address should be equal to itself"),
+                () -> assertAll("Symmetry test", () -> assertEquals(address1, address2),
+                        () -> assertEquals(address2, address1)),
+                () -> assertNotEquals(new Object(), address1,
+                        "Address should not be equal to object of different type"));
     }
 
     @Test
     void testHashCode() {
         int initialHashCode = address1.hashCode();
         assertAll(
-            () -> assertEquals(address1.hashCode(), address2.hashCode(), "Equal addresses should have the same hash code"),
-            () -> assertNotEquals(address1.hashCode(), address3.hashCode(), "Different addresses should have different hash codes"),
-            () -> assertEquals(initialHashCode, address1.hashCode(), "Hash code should be consistent"),
-            () -> assertEquals(initialHashCode, address1.hashCode(), "Hash code should be consistent on multiple calls")
-        );
+                () -> assertEquals(address1.hashCode(), address2.hashCode(),
+                        "Equal addresses should have the same hash code"),
+                () -> assertNotEquals(address1.hashCode(), address3.hashCode(),
+                        "Different addresses should have different hash codes"),
+                () -> assertEquals(initialHashCode, address1.hashCode(), "Hash code should be consistent"),
+                () -> assertEquals(initialHashCode, address1.hashCode(),
+                        "Hash code should be consistent on multiple calls"));
     }
+
 }

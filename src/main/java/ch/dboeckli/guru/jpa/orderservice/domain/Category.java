@@ -1,6 +1,5 @@
 package ch.dboeckli.guru.jpa.orderservice.domain;
 
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
@@ -22,9 +21,9 @@ public class Category extends BaseEntity {
     private String description;
 
     @ManyToMany
-    @JoinTable(name = "product_category",
-        joinColumns = @JoinColumn(name = "category_id"),
-        inverseJoinColumns = @JoinColumn(name = "product_id"))
+    @JoinTable(name = "product_category", joinColumns = @JoinColumn(name = "category_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id"))
     @ToString.Exclude
     private Set<Product> products;
+
 }

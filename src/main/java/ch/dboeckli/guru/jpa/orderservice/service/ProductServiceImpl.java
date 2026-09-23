@@ -24,4 +24,5 @@ public class ProductServiceImpl implements ProductService {
         product.setQuantityOnHand(quantityOnHand);
         return productRepository.saveAndFlush(product);
     }
+
 }

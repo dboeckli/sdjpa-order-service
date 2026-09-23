@@ -28,4 +28,5 @@ public class OrderLine extends BaseEntity {
 
     @ManyToOne
     private Product product;
+
 }
