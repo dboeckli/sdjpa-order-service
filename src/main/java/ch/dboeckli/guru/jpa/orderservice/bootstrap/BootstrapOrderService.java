@@ -23,9 +23,12 @@ public class BootstrapOrderService {
 
             // here we get a lazy loading initializing exception
             try {
-                orderLine.getProduct().getCategories().forEach(category -> log.info("### Category: {}", category.getDescription()));
+                orderLine.getProduct()
+                    .getCategories()
+                    .forEach(category -> log.info("### Category: {}", category.getDescription()));
                 log.error("### No LazyInitializationException has been thrown");
-            } catch (LazyInitializationException ex) {
+            }
+            catch (LazyInitializationException ex) {
                 log.error("### Expected LazyInitializationException for demonstration", ex);
             }
         });

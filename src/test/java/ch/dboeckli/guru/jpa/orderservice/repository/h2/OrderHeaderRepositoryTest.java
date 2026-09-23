@@ -66,22 +66,17 @@ class OrderHeaderRepositoryTest {
         OrderHeader savedOrder = orderHeaderRepository.save(orderHeader);
         orderHeaderRepository.flush();
 
-        assertAll("Saved Order",
-            () -> assertNotNull(savedOrder),
-            () -> assertNotNull(savedOrder.getId()),
-            () -> assertNotNull(savedOrder.getOrderLines()),
-            () -> assertEquals(1, savedOrder.getOrderLines().size()),
-            () -> assertNotNull(savedOrder.getOrderLines().iterator().next().getId())
-        );
+        assertAll("Saved Order", () -> assertNotNull(savedOrder), () -> assertNotNull(savedOrder.getId()),
+                () -> assertNotNull(savedOrder.getOrderLines()),
+                () -> assertEquals(1, savedOrder.getOrderLines().size()),
+                () -> assertNotNull(savedOrder.getOrderLines().iterator().next().getId()));
 
         OrderHeader fetchedOrder = orderHeaderRepository.getReferenceById(savedOrder.getId());
-        assertAll("Fetched Order",
-            () -> assertNotNull(fetchedOrder),
-            () -> assertEquals(1, fetchedOrder.getOrderLines().size()),
-            () -> assertNotNull(fetchedOrder.getOrderLines().iterator().next().getProduct().getId()),
-            () -> assertNotNull(fetchedOrder.getCustomer().getId()),
-            () -> assertNotNull(fetchedOrder.getOrderApproval().getId())
-        );
+        assertAll("Fetched Order", () -> assertNotNull(fetchedOrder),
+                () -> assertEquals(1, fetchedOrder.getOrderLines().size()),
+                () -> assertNotNull(fetchedOrder.getOrderLines().iterator().next().getProduct().getId()),
+                () -> assertNotNull(fetchedOrder.getCustomer().getId()),
+                () -> assertNotNull(fetchedOrder.getOrderApproval().getId()));
     }
 
     @Test
@@ -95,20 +90,14 @@ class OrderHeaderRepositoryTest {
         orderHeader.setCustomer(savedCustomer);
         OrderHeader savedOrder = orderHeaderRepository.save(orderHeader);
 
-        assertAll("Saved Order",
-            () -> assertNotNull(savedOrder),
-            () -> assertNotNull(savedOrder.getId())
-        );
+        assertAll("Saved Order", () -> assertNotNull(savedOrder), () -> assertNotNull(savedOrder.getId()));
 
         OrderHeader fetchedOrder = orderHeaderRepository.getReferenceById(savedOrder.getId());
 
-        assertAll("Fetched Order",
-            () -> assertNotNull(fetchedOrder),
-            () -> assertNotNull(fetchedOrder.getId()),
-            () -> assertNotNull(fetchedOrder.getCreatedDate()),
-            () -> assertNotNull(fetchedOrder.getLastModifiedDate()),
-            () -> assertNotNull(fetchedOrder.getCustomer().getId())
-        );
+        assertAll("Fetched Order", () -> assertNotNull(fetchedOrder), () -> assertNotNull(fetchedOrder.getId()),
+                () -> assertNotNull(fetchedOrder.getCreatedDate()),
+                () -> assertNotNull(fetchedOrder.getLastModifiedDate()),
+                () -> assertNotNull(fetchedOrder.getCustomer().getId()));
     }
 
     @Test
@@ -137,22 +126,17 @@ class OrderHeaderRepositoryTest {
         OrderHeader savedOrder = orderHeaderRepository.saveAndFlush(orderHeader);
         log.info("order saved and flushed");
 
-        List<Long> orderLineIds = savedOrder.getOrderLines().stream()
-            .map(OrderLine::getId)
-            .toList();
+        List<Long> orderLineIds = savedOrder.getOrderLines().stream().map(OrderLine::getId).toList();
 
         orderHeaderRepository.deleteById(savedOrder.getId());
         orderHeaderRepository.flush();
 
-        assertAll("Fetched Order",
-            () -> assertFalse(orderHeaderRepository.existsById(savedOrder.getId())),
-            () -> {
-                for (Long orderLineId : orderLineIds) {
-                    assertFalse(orderLineRepository.existsById(orderLineId), "OrderLine should be deleted: " + orderLineId);
-                }
-            },
-            () -> assertFalse(orderApprovalRepository.existsById(savedOrder.getOrderApproval().getId()), "OrderApproval should be deleted: " + savedOrder.getOrderApproval().getId())
-        );
+        assertAll("Fetched Order", () -> assertFalse(orderHeaderRepository.existsById(savedOrder.getId())), () -> {
+            for (Long orderLineId : orderLineIds) {
+                assertFalse(orderLineRepository.existsById(orderLineId), "OrderLine should be deleted: " + orderLineId);
+            }
+        }, () -> assertFalse(orderApprovalRepository.existsById(savedOrder.getOrderApproval().getId()),
+                "OrderApproval should be deleted: " + savedOrder.getOrderApproval().getId()));
     }
 
     @Test
@@ -190,4 +174,5 @@ class OrderHeaderRepositoryTest {
         int hashCode2 = orderHeader.hashCode();
         assertEquals(hashCode1, hashCode2);
     }
+
 }

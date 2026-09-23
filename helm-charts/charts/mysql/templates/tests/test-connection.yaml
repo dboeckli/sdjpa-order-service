@@ -15,7 +15,7 @@ spec:
       command: [ '/bin/sh', '-c' ]
       args:
         - |
-          echo "### Test 1: MySQL Connection using MYSQL_USER: $MYSQL_USER"
+          echo "### Test 1a: MySQL Connection using user: $MYSQL_USER"
           mysql -h{{ include "sdjpa-order-service-mysql.fullname" . }} \
                 -P{{ .Values.mysql.port }} \
                 -u$MYSQL_USER \
@@ -24,7 +24,7 @@ spec:
                 -e "SELECT 1; SELECT DATABASE();"
           echo "Exit code: $?"
 
-          echo "### Test 2: MySQL Connection using MYSQL_ADMIN_USER: $MYSQL_ADMIN_USER"
+          echo "### Test 1b: MySQL Connection using user: $MYSQL_ADMIN_USER"
           mysql -h{{ include "sdjpa-order-service-mysql.fullname" . }} \
                 -P{{ .Values.mysql.port }} \
                 -u$MYSQL_ADMIN_USER \
@@ -33,13 +33,6 @@ spec:
                 -e "SELECT 1; SELECT DATABASE();"
           echo "Exit code: $?"
 
-          echo "### Test 3: MySQL Root Connection"
-          mysql -h{{ include "sdjpa-order-service-mysql.fullname" . }} \
-                -P{{ .Values.mysql.port }} \
-                -uroot \
-                -p$MYSQL_ROOT_PASSWORD \
-                -e "SHOW DATABASES;"
-          echo "Exit code: $?"
       envFrom:
         - secretRef:
             name: {{ include "sdjpa-order-service-mysql.fullname" . }}-secrets

@@ -31,4 +31,5 @@ class ProductServiceImplIT {
         Product savedProduct2 = productService.updateQuantityOnHand(savedProduct.getId(), 25);
         assertEquals(25, savedProduct2.getQuantityOnHand());
     }
+
 }

@@ -24,17 +24,12 @@ class ProductRepositoryTest {
     @Test
     void testGetCategory() {
         Optional<Product> productOptional = productRepository.findByDescription("PRODUCT1");
-        assertAll(
-            () -> assertTrue(productOptional.isPresent(), "Product should be present"),
-            () -> {
-                Product product = productOptional.get();
-                assertAll(
-                    () -> assertNotNull(product, "Product should not be null"),
+        assertAll(() -> assertTrue(productOptional.isPresent(), "Product should be present"), () -> {
+            Product product = productOptional.get();
+            assertAll(() -> assertNotNull(product, "Product should not be null"),
                     () -> assertNotNull(product.getCategories(), "Product categories should not be null"),
-                    () -> assertEquals(2, product.getCategories().size(), "Product should have 2 categories")
-                );
-            }
-        );
+                    () -> assertEquals(2, product.getCategories().size(), "Product should have 2 categories"));
+        });
     }
 
     @Test
@@ -47,14 +42,13 @@ class ProductRepositoryTest {
 
         Product fetchedProduct = productRepository.getReferenceById(savedProduct.getId());
 
-        assertAll(
-            () -> assertNotNull(fetchedProduct, "Fetched product should not be null"),
-            () -> assertNotNull(fetchedProduct.getDescription(), "Product description should not be null"),
-            () -> assertEquals("My Product", fetchedProduct.getDescription(), "Product description should match"),
-            () -> assertNotNull(fetchedProduct.getCreatedDate(), "Created date should not be null"),
-            () -> assertNotNull(fetchedProduct.getLastModifiedDate(), "Last modified date should not be null"),
-            () -> assertEquals(ProductStatus.NEW, fetchedProduct.getProductStatus(), "Product status should be NEW")
-        );
+        assertAll(() -> assertNotNull(fetchedProduct, "Fetched product should not be null"),
+                () -> assertNotNull(fetchedProduct.getDescription(), "Product description should not be null"),
+                () -> assertEquals("My Product", fetchedProduct.getDescription(), "Product description should match"),
+                () -> assertNotNull(fetchedProduct.getCreatedDate(), "Created date should not be null"),
+                () -> assertNotNull(fetchedProduct.getLastModifiedDate(), "Last modified date should not be null"),
+                () -> assertEquals(ProductStatus.NEW, fetchedProduct.getProductStatus(),
+                        "Product status should be NEW"));
     }
 
     @Test

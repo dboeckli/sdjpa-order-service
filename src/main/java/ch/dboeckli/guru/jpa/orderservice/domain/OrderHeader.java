@@ -16,38 +16,14 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
-@AttributeOverride(
-    name = "shippingAddress.address",
-    column = @Column(name = "shipping_address")
-)
-@AttributeOverride(
-    name = "shippingAddress.city",
-    column = @Column(name = "shipping_city")
-)
-@AttributeOverride(
-    name = "shippingAddress.state",
-    column = @Column(name = "shipping_state")
-)
-@AttributeOverride(
-    name = "shippingAddress.zipCode",
-    column = @Column(name = "shipping_zip_code")
-)
-@AttributeOverride(
-    name = "billToAddress.address",
-    column = @Column(name = "bill_to_address")
-)
-@AttributeOverride(
-    name = "billToAddress.city",
-    column = @Column(name = "bill_to_city")
-)
-@AttributeOverride(
-    name = "billToAddress.state",
-    column = @Column(name = "bill_to_state")
-)
-@AttributeOverride(
-    name = "billToAddress.zipCode",
-    column = @Column(name = "bill_to_zip_code")
-)
+@AttributeOverride(name = "shippingAddress.address", column = @Column(name = "shipping_address"))
+@AttributeOverride(name = "shippingAddress.city", column = @Column(name = "shipping_city"))
+@AttributeOverride(name = "shippingAddress.state", column = @Column(name = "shipping_state"))
+@AttributeOverride(name = "shippingAddress.zipCode", column = @Column(name = "shipping_zip_code"))
+@AttributeOverride(name = "billToAddress.address", column = @Column(name = "bill_to_address"))
+@AttributeOverride(name = "billToAddress.city", column = @Column(name = "bill_to_city"))
+@AttributeOverride(name = "billToAddress.state", column = @Column(name = "bill_to_state"))
+@AttributeOverride(name = "billToAddress.zipCode", column = @Column(name = "bill_to_zip_code"))
 public class OrderHeader extends BaseEntity {
 
     @Version
@@ -66,14 +42,16 @@ public class OrderHeader extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
-    // For Performance Tuning: OrderLines should be fetched in a separate query to avoid N+1 problem
+    // For Performance Tuning: OrderLines should be fetched in a separate query to avoid
+    // N+1 problem
     @OneToMany(mappedBy = "orderHeader", cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, fetch = FetchType.EAGER)
     @Fetch(FetchMode.SUBSELECT)
     @ToString.Exclude
     private Set<OrderLine> orderLines;
 
-    // For Performance Tuning: OrderApproval should be fetched in a separate query to avoid N+1 problem
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    // For Performance Tuning: OrderApproval should be fetched in a separate query to
+    // avoid N+1 problem
+    @OneToOne(cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     @Fetch(FetchMode.SELECT)
     @ToString.Exclude
     private OrderApproval orderApproval;
@@ -90,4 +68,5 @@ public class OrderHeader extends BaseEntity {
         orderLines.add(orderLine);
         orderLine.setOrderHeader(this);
     }
+
 }

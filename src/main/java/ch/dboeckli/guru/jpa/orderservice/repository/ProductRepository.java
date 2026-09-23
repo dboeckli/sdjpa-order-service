@@ -8,7 +8,7 @@ import org.springframework.lang.NonNull;
 
 import java.util.Optional;
 
-public interface ProductRepository extends JpaRepository<Product, Long>  {
+public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Optional<Product> findByDescription(String description);
 
@@ -16,4 +16,5 @@ public interface ProductRepository extends JpaRepository<Product, Long>  {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @NonNull
     Optional<Product> findById(@NonNull Long id);
+
 }

@@ -23,9 +23,9 @@ public class Product extends BaseEntity {
     private Integer quantityOnHand = 0;
 
     @ManyToMany
-    @JoinTable(name = "product_category",
-            joinColumns = @JoinColumn(name = "product_id"),
+    @JoinTable(name = "product_category", joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     @ToString.Exclude
     private Set<Category> categories;
+
 }

@@ -42,17 +42,27 @@ public class TestDataLoader implements CommandLineRunner {
         OrderHeader singleOrderHeader = createSingleOrderHeader();
 
         /*
-        demostation of following fact: https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/annotations.html
-        Method visibility and @Transactional in proxy mode
-
-        The @Transactional annotation is typically used on methods with public visibility. As of 6.0, protected or package-visible methods can also be made transactional for class-based proxies by default.
-        Note that transactional methods in interface-based proxies must always be public and defined in the proxied interface. For both kinds of proxies, only external method calls coming in through the proxy
-        are intercepted.
+         * demostation of following fact:
+         * https://docs.spring.io/spring-framework/reference/data-access/transaction/
+         * declarative/annotations.html Method visibility and @Transactional in proxy mode
+         *
+         * The @Transactional annotation is typically used on methods with public
+         * visibility. As of 6.0, protected or package-visible methods can also be made
+         * transactional for class-based proxies by default. Note that transactional
+         * methods in interface-based proxies must always be public and defined in the
+         * proxied interface. For both kinds of proxies, only external method calls coming
+         * in through the proxy are intercepted.
          */
         log.info("### demonstrateLazyLoading 1...");
-        demonstrateLazyLoading(singleOrderHeader.getId()); // Demonstrate lazy loading with LazyInitializationException
+        demonstrateLazyLoading(singleOrderHeader.getId()); // Demonstrate lazy loading
+                                                           // with
+                                                           // LazyInitializationException
         log.info("### demonstrateLazyLoading 2...");
-        bootstrapOrderService.demonstrateLazyLoading(singleOrderHeader.getId()); // Demonstrate lazy loading without LazyInitializationException
+        bootstrapOrderService.demonstrateLazyLoading(singleOrderHeader.getId()); // Demonstrate
+                                                                                 // lazy
+                                                                                 // loading
+                                                                                 // without
+                                                                                 // LazyInitializationException
 
         log.info("### Loading test data...");
         List<Product> products = loadProducts();
@@ -64,7 +74,8 @@ public class TestDataLoader implements CommandLineRunner {
         }
 
         orderHeaderRepository.flush();
-        log.info("### Test data loaded successfully! orders to create {}, created {}.", ORDERS_TO_CREATE, orderHeaderRepository.count());
+        log.info("### Test data loaded successfully! orders to create {}, created {}.", ORDERS_TO_CREATE,
+                orderHeaderRepository.count());
     }
 
     private OrderHeader createSingleOrderHeader() {
@@ -103,14 +114,17 @@ public class TestDataLoader implements CommandLineRunner {
 
             // here we get a lazy loading initializing exception
             try {
-                orderLine.getProduct().getCategories().forEach(category -> log.info("### Category: {}", category.getDescription()));
-            } catch (LazyInitializationException ex) {
+                orderLine.getProduct()
+                    .getCategories()
+                    .forEach(category -> log.info("### Category: {}", category.getDescription()));
+            }
+            catch (LazyInitializationException ex) {
                 log.error("### Expected LazyInitializationException for demonstration", ex);
             }
         });
     }
 
-    private void saveOrder(Customer customer, List<Product> products){
+    private void saveOrder(Customer customer, List<Product> products) {
         OrderHeader orderHeader = new OrderHeader();
         orderHeader.setCustomer(customer);
 
@@ -128,20 +142,20 @@ public class TestDataLoader implements CommandLineRunner {
     }
 
     private Customer getOrSaveCustomer(String customerName) {
-        return customerRepository.findCustomerByCustomerNameIgnoreCase(customerName)
-            .orElseGet(() -> {
-                Customer c1 = new Customer();
-                c1.setCustomerName(customerName);
-                c1.setEmail("test@example.com");
-                Address address = new Address();
-                address.setAddress("123 Main");
-                address.setCity("New Orleans");
-                address.setState("LA");
-                c1.setAddress(address);
-                return customerRepository.save(c1);
-            });
+        return customerRepository.findCustomerByCustomerNameIgnoreCase(customerName).orElseGet(() -> {
+            Customer c1 = new Customer();
+            c1.setCustomerName(customerName);
+            c1.setEmail("test@example.com");
+            Address address = new Address();
+            address.setAddress("123 Main");
+            address.setCity("New Orleans");
+            address.setState("LA");
+            c1.setAddress(address);
+            return customerRepository.save(c1);
+        });
     }
-    private List<Product> loadProducts(){
+
+    private List<Product> loadProducts() {
         List<Product> products = new ArrayList<>();
 
         products.add(getOrSaveProduct(PRODUCT_D1));
@@ -150,13 +164,14 @@ public class TestDataLoader implements CommandLineRunner {
 
         return products;
     }
+
     private Product getOrSaveProduct(String description) {
-        return productRepository.findByDescription(description)
-            .orElseGet(() -> {
-                Product p1 = new Product();
-                p1.setDescription(description);
-                p1.setProductStatus(ProductStatus.NEW);
-                return productRepository.save(p1);
-            });
+        return productRepository.findByDescription(description).orElseGet(() -> {
+            Product p1 = new Product();
+            p1.setDescription(description);
+            p1.setProductStatus(ProductStatus.NEW);
+            return productRepository.save(p1);
+        });
     }
+
 }
