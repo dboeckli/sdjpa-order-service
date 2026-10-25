@@ -61,8 +61,8 @@ is needed here. On a normal host (Windows/CI) this does not apply either.
   `service/` `ProductService`/`ProductServiceImpl`, `bootstrap/` seeds data on startup
   (`BootstrapOrderService`, `TestDataLoader`).
 - Schema migrations: `src/main/resources/db/migration` (Flyway only, V2.0–V15.0).
-- `log/` (`LogMessage`, `ConfigChangeListener`) + `config/RequestLoggingConfig` for contextual
-  logging/request tracing.
+- `config/RequestLoggingConfig`/`RequestLoggingFilter` for request logging (segment-exact
+  `appconfig.request-logging.exclude-paths`, switchable via `appconfig.request-logging.enabled`).
 
 ## Deploy / CI
 
